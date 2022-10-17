@@ -1,13 +1,8 @@
-import sys
 from PIL import Image
 import numpy as np
-import matplotlib.pyplot as plt
 
 class ImageProcessor:
-
   def pre_process_image(self, path):
-
-    print(path, file=sys.stderr)
 
      # Load RGB image 
     img = Image.open(path).convert("RGB")

@@ -6,19 +6,9 @@ from recognition_service.imageProcessor import ImageProcessor
 
 
 from flask import Flask, request
-from flask_sqlalchemy import SQLAlchemy
+
 
 app = Flask(__name__)
-# app.config.from_object("recognition_service.configuration.Config")
-# db = SQLAlchemy(app)
-
-# class PetProfile(db.Model):
-#     __tablename__ = 'Pet Profiles'
-    
-#     id = db.Column(db.Integer, primary_key=True)
-#     pet_name = db.Column(db.String(128), unique=False, nullable=False)
-
-
 
 
 
