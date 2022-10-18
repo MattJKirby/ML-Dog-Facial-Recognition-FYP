@@ -12,7 +12,7 @@ services:
   db:
     image: mongo:latest
     restart: unless-stopped
-    container_name: moduledb
+    container_name: db
     ports:
       - "27017:27017"
     volumes: 

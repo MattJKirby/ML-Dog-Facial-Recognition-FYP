@@ -1,0 +1,2 @@
+# Ignore all mongo db files from repo
+db/
