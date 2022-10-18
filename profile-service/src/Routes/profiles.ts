@@ -18,8 +18,9 @@ export const upload = multer({ storage: multerStorage });
 /**
  * Post '/'
  * Returns a string
+ * Can accept max 8 images
  */
-ProfileRouter.post('/new',upload.array('image',5) , async (req:Request, res:Response): Promise<void> => {
+ProfileRouter.post('/new',upload.array('image',8) , async (req:Request, res:Response): Promise<void> => {
   const image = req.files
 
   res.json({image: image})
