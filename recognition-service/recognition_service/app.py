@@ -29,14 +29,9 @@ def hello():
 @app.route('/image', methods=['POST'])
 def newProfile():
   formData = request.form
-
-  if 'image' not in request.files:
-    return 'No files received!'
-
-  files = request.files.getlist("image")
   
   try:
-    profileManager.newProfile(formData.get('name'), formData.get('user'), files)
+    profileManager.newProfile(formData.get('name'), formData.get('user'), request.files.getlist("image"))
   except Exception as e:
     return jsonify(str(e))
   

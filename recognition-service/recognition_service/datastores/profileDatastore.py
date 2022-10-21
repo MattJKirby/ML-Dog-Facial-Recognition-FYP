@@ -18,4 +18,4 @@ class ProfileDatastore:
       images.append(image_bytes.getvalue())
 
 
-    self.database[self.collection].insert_one({'images': images})
+    self.database[self.collection].insert_one({'name': name, 'images': images})

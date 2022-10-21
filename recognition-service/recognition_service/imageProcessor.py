@@ -2,6 +2,18 @@ from PIL import Image
 import numpy as np
 
 class ImageProcessor:
+
+  def __init__(self):
+    self.accepted_formats = ['.jpg', '.png']
+  
+  def validate_image_format(self, file):
+    ext = f'.{file.filename.split(".")[-1]}'
+
+    if not ext in self.accepted_formats:
+      raise Exception(f'Invalid image format: \'{ext}\'. Allowed formats are: {",".join(self.accepted_formats)}')
+
+  
+  
   def pre_process_image(self, path):
 
      # Load RGB image 
