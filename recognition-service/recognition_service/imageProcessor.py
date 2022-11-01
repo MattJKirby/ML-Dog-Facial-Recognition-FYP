@@ -14,18 +14,22 @@ class ImageProcessor:
 
   
   
-  def pre_process_image(self, path):
+  def pre_process_images(self, files):
+    pre_processed_files = []
 
-     # Load RGB image 
-    img = Image.open(path).convert("RGB")
+    for file in files:
+      # Load RGB image 
+      img = Image.open(file).convert("RGB")
 
-    # Resize image to specified image dimensions
-    img = img.resize((224,224),Image.ANTIALIAS)
+      # Resize image to specified image dimensions
+      img = img.resize((224,224),Image.ANTIALIAS)
 
-    # Rescale the image
-    img = np.array(img)/255
+      # Rescale the image
+      img = np.array(img)/255
 
-    # Convert tensor to 4D
-    img = np.expand_dims(img, 0)
+      # Convert tensor to 4D
+      img = np.expand_dims(img, 0)
 
-    return img
+      pre_processed_files.append(img)
+
+    return np.concatenate(pre_processed_files)
