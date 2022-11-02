@@ -8,13 +8,14 @@ from keras.layers import Dense, Dropout,Input
 
 class RecognitionService:
   def __init__(self, weights_path):
-    self.model = self.init_model(224,224,3).load_weights(weights_path)
+    self.model = self.init_model(224,224,3)
+    self.model.load_weights(weights_path)
 
   def init_model(self, img_width, img_height, channels):
-    input = Input((img_width, img_height, channels))
+    input = tf.keras.Input((img_width, img_height, channels))
     base_model = self.embedding_model(img_width, img_height, channels)
     model = base_model(input)
-    return Model(inputs=input, outputs=model)
+    return tf.keras.Model(inputs=input, outputs=model)
 
 
   def embedding_model(self, img_width, img_height, channels):
@@ -31,4 +32,5 @@ class RecognitionService:
     return model
 
   def generate_image_embeddings(self, image_array):
+    print(tf.version.VERSION)
     return self.model.predict(image_array)

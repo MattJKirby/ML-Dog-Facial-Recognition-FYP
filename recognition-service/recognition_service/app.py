@@ -2,6 +2,7 @@ import base64
 import sys
 from urllib import response
 from PIL import Image
+from recognition_service.recognition.recognitionService import RecognitionService
 from recognition_service.profileManager import ProfileManager
 import numpy as np
 from recognition_service.imageProcessor import ImageProcessor
@@ -14,8 +15,8 @@ from flask import Flask, request, jsonify
 
 app = Flask(__name__)
 db_connector = MongoConnector('localhost',27017)
-
 profileManager = ProfileManager(db_connector)
+recog = RecognitionService('./model/dog_face_model_00888_val_loss_weights.hdf5')
 
 
 
@@ -29,6 +30,8 @@ def hello():
 @app.route('/image', methods=['POST'])
 def newProfile():
   formData = request.form
+
+  print("Testing")
   
   try:
     profileManager.newProfile(formData.get('name'), formData.get('user'), request.files.getlist("image"))
@@ -38,9 +41,12 @@ def newProfile():
   
 
   image_processor = ImageProcessor()
-  # processed_image = image_processor.pre_process_image(file)
+  processed_images = image_processor.pre_process_images(request.files.getlist("image"))
 
-  # print(processed_image, file=sys.stderr)
+  embeddings = recog.generate_image_embeddings(processed_images)
+
+  print(embeddings.shape, file=sys.stderr)
 
   
   return 'This is a test route!'
+
