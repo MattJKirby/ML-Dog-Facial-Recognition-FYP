@@ -10,22 +10,22 @@ const PetProfileSchema = new Schema({
     required: true
   },
 
-  PetBreed: {
-    type: String,
-    required: true
-  },
+  // PetBreed: {
+  //   type: String,
+  //   required: true
+  // },
 
-  PetAge: {
-    type: Number,
-    required: true,
-    min: [0, 'Cannot be less than 0, got {VALUE}'],
-    max: 25
-  },
+  // PetAge: {
+  //   type: Number,
+  //   required: true,
+  //   min: [0, 'Cannot be less than 0, got {VALUE}'],
+  //   max: 25
+  // },
 
   Images: {
     type: [ImageSchema],
     required: true,
-    minLength: 4,
+    minLength: 2,
     maxLength: 8
   }  
 })
