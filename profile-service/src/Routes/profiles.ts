@@ -1,5 +1,7 @@
 import express, { Request, Response } from 'express'
 import multer from 'multer'
+import { register } from 'ts-node'
+import PetProfileSchema from '../Database/PetProfileSchema'
 
 export const ProfileRouter = express.Router()
 
@@ -13,7 +15,9 @@ const multerStorage = multer.diskStorage({
       cb(null, file.originalname)
   }
 })
-export const upload = multer({ storage: multerStorage });
+
+const storage = multer.memoryStorage()
+export const upload = multer({ storage: storage });
 
 /**
  * Post '/'
@@ -21,9 +25,19 @@ export const upload = multer({ storage: multerStorage });
  * Can accept max 8 images
  */
 ProfileRouter.post('/new',upload.array('image',8) , async (req:Request, res:Response): Promise<void> => {
-  const image = req.files
+  if(req.files == undefined || req.files?.length < 1){
+    throw new Error("Please provide at least 4 images")
+  }
 
-  res.json({image: image})
+  const receivedImageArray = Object.values(req.files).map((image: any, index: number) => {
+    return {name: `image.originalname_${index}`, fileName: image.originalname, image: image.buffer}
+  })
+
+  PetProfileSchema.
+
+  console.log(receivedImageArray)
+
+  res.json({image: req.files})
 })
 
 ProfileRouter.get('/new', async (req:Request, res:Response): Promise<void> => {
