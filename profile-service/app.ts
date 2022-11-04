@@ -5,6 +5,9 @@ import { MongoConnectionProvider } from './src/Database/Utility/MongoConnectionP
 // Server configuration
 const server:Application = express()
 
+// Configure static resources
+server.use(express.static(__dirname + '/public'));
+
 // InitaliseRoutes
 initializeRoutes(server)
 
