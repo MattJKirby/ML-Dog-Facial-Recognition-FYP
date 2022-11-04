@@ -2,13 +2,17 @@ import express, { Request, Response } from 'express'
 import multer from 'multer'
 import { register } from 'ts-node'
 import PetProfileSchema from '../Database/PetProfileSchema'
+import ProfileDataStore from '../DataStores/ProfileDataStore'
+import { ProfileManager } from '../Profiles/ProfileManager'
 
 export const ProfileRouter = express.Router()
+
+const profileManger = new ProfileManager()
 
 //Initialize File Storage
 const multerStorage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, './uploads/')
+    cb(null, './public/uploads')
   },
 
   filename: function (req: any, file: any, cb: any) {
@@ -16,8 +20,7 @@ const multerStorage = multer.diskStorage({
   }
 })
 
-const storage = multer.memoryStorage()
-export const upload = multer({ storage: storage });
+export const upload = multer({ storage: multerStorage });
 
 /**
  * Post '/'
@@ -30,12 +33,10 @@ ProfileRouter.post('/new',upload.array('image',8) , async (req:Request, res:Resp
   }
 
   const receivedImageArray = Object.values(req.files).map((image: any, index: number) => {
-    return {name: `image.originalname_${index}`, fileName: image.originalname, image: image.buffer}
+    return {name: `${image.originalname}_${index}`, fileName: image.originalname, filePath: image.path}
   })
 
-  PetProfileSchema.
-
-  console.log(receivedImageArray)
+  profileManger.NewProfile("asdf", receivedImageArray)
 
   res.json({image: req.files})
 })
