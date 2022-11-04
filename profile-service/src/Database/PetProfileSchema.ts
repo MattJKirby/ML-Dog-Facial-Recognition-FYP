@@ -5,6 +5,11 @@ import ImageSchema from './ImageSchema';
  * Schema for defining a pet profile
  */
 const PetProfileSchema = new Schema({
+  ProfileUid: {
+    type: String,
+    required: true
+  },
+  
   PetName: {
     type: String,
     required: true

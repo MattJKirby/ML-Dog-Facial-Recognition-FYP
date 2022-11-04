@@ -12,9 +12,9 @@ const ImageSchema = new Schema({
     type: String,
     required: true
   },
-  image: { 
-    data: Buffer,
-    contentType: String 
+  filePath: { 
+    type: String,
+    required: true
   }
 })
 
