@@ -1,3 +1,6 @@
+import io
+import requests
+from PIL import Image
 from recognition_service.imageProcessor import ImageProcessor
 from recognition_service.datastores.profileDatastore import ProfileDatastore
 
@@ -27,4 +30,21 @@ class ProfileManager:
 
     self.datastore.save_profile(name, user, files)
 
+  def loadProfiles(self):
+    image_processor = ImageProcessor()
+    profileDict = self.datastore.getAllProfiles()
+    profileImages = []
+    profileUids = []
+
+    for profile in profileDict:
+      for path in profileDict[profile]:
+        profileUids.append(profile)
+        serverPath = 'http://localhost:5002/' + path.split('public/')[1]
+        response = requests.get(serverPath, stream=True)
+        img = io.BytesIO(response.content)
+        profileImages.append(img)
+
+
+    return(profileUids, image_processor.pre_process_images(profileImages))
   
+   

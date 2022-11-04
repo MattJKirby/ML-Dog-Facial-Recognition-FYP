@@ -18,6 +18,8 @@ db_connector = MongoConnector('localhost',27017)
 profileManager = ProfileManager(db_connector)
 recog = RecognitionService('./model/dog_face_model_00888_val_loss_weights.hdf5')
 
+print(profileManager.loadProfiles()[1].shape)
+
 
 
 @app.route('/')
