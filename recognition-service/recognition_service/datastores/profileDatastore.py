@@ -21,6 +21,13 @@ class ProfileDatastore:
 
   #   self.database[self.collection].insert_one({'name': name, 'images': images})
 
+  def getProfileImagesByUid(self, profileUid):
+    profile = self.database[self.collection].find_one({'ProfileUid': profileUid})
+    imageList = []
+    for image in profile['Images']:
+      imageList.append(image['filePath'])
+    return imageList
+
   def getAllProfiles(self):
     profileList = list(self.database[self.collection].find({}, {'_id': 0, 'ProfileUid': 1 ,'Images.filePath': 1}))
     profiles = {}
