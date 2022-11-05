@@ -11,24 +11,15 @@ class ProfileManager:
     self.datastore = ProfileDatastore(self.profile_db)
     self.img_processor = ImageProcessor()
     
-  def newProfile(self, name, user, files):
-    
-    if len(files) < 2 or len(files) > 8:
-      raise Exception(f'Error uploading files: (Found {len(files)}, require between 4 and 8)')
-
-    for img in files:
-      try:
-        self.img_processor.validate_image_format(img)
-      except Exception as e:
-        raise Exception(f'{e}')
-        
-    if name == None or len(name) < 1:
-      raise Exception(f'Invalid name: \'{name}\'')
-
-    if user == None or len(user) < 1:
-      raise Exception(f'Invalid user: \'{user}\'')
-
-    self.datastore.save_profile(name, user, files)
+  def newProfile(self, profileUid):
+    image_processor = ImageProcessor()
+    imageList = []
+    uidList = []
+    for path in self.datastore.getProfileImagesByUid(profileUid):
+      uidList.append(profileUid)
+      imageList.append(self.convertPathToImage(path))
+   
+    return (uidList, image_processor.pre_process_images(imageList) )
 
   def loadProfiles(self):
     image_processor = ImageProcessor()
@@ -46,5 +37,11 @@ class ProfileManager:
 
 
     return(profileUids, image_processor.pre_process_images(profileImages))
+
+  def convertPathToImage(self, path):
+    serverPath = 'http://localhost:5002/' + path.split('public/')[1]
+    response = requests.get(serverPath, stream=True)
+    return io.BytesIO(response.content)
+
   
    
