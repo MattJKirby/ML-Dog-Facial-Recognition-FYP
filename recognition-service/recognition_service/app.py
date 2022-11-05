@@ -20,6 +20,8 @@ recog = RecognitionService('./model/dog_face_model_00888_val_loss_weights.hdf5')
 
 print(profileManager.loadProfiles()[1].shape)
 
+print(profileManager.newProfile('52ec5fe3-437d-4bab-9a28-274790dd14ea')[1].shape)
+
 
 
 @app.route('/')
@@ -29,26 +31,11 @@ def hello():
     db['test_collection'].insert_one({'test': 1234})
     return 'Hello, World!'
 
-@app.route('/image', methods=['POST'])
+@app.route('/loadProfile', methods=['POST'])
 def newProfile():
-  formData = request.form
+  profileUid = request.form.get('ProfileUid')
+  profileData = profileManager.newProfile(profileUid)
+  print(profileData)
 
-  print("Testing")
-  
-  try:
-    profileManager.newProfile(formData.get('name'), formData.get('user'), request.files.getlist("image"))
-  except Exception as e:
-    return jsonify(str(e))
-  
-  
-
-  image_processor = ImageProcessor()
-  processed_images = image_processor.pre_process_images(request.files.getlist("image"))
-
-  embeddings = recog.generate_image_embeddings(processed_images)
-
-  print(embeddings.shape, file=sys.stderr)
-
-  
   return 'This is a test route!'
 
