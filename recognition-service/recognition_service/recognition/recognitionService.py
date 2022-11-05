@@ -14,8 +14,7 @@ class RecognitionService:
   def init_model(self, img_width, img_height, channels):
     input = tf.keras.Input((img_width, img_height, channels))
     base_model = self.embedding_model(img_width, img_height, channels)
-    model = base_model(input)
-    return tf.keras.Model(inputs=input, outputs=model)
+    return tf.keras.Model(inputs=input, outputs=base_model(input))
 
 
   def embedding_model(self, img_width, img_height, channels):
