@@ -4,15 +4,15 @@ import mongoose, { Schema } from 'mongoose'
  * Schema for storing an image
  */
 const ImageSchema = new Schema({
-  name: {
+  Name: {
     type: String,
     required : true
   },
-  fileName: {
+  FileName: {
     type: String,
     required: true
   },
-  filePath: { 
+  FilePath: { 
     type: String,
     required: true
   }
