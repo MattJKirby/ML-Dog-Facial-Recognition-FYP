@@ -1,9 +1,6 @@
 import axios from 'axios'
 import express, { Request, Response } from 'express'
 import multer from 'multer'
-import { register } from 'ts-node'
-import PetProfileSchema from '../Database/PetProfileSchema'
-import ProfileDataStore from '../DataStores/ProfileDataStore'
 import { ProfileManager } from '../Profiles/ProfileManager'
 
 export const ProfileRouter = express.Router()
@@ -33,10 +30,7 @@ ProfileRouter.post('/new',upload.array('image',8) , async (req:Request, res:Resp
     throw new Error("Please provide at least 4 images")
   }
   const profile = await profileManger.NewProfile(req.body.petName, Object.values(req.files))
-
-  console.log(profile)
-
-  const response = axios.post('http://localhost:5000/loadProfile', {profileUid: profile.ProfileUid})
+  const response = axios.post('http://127.0.0.1:5000/loadProfile', {ProfileUid: profile.ProfileUid},{headers: {'Content-Type': 'multipart/form-data'}})
 
   res.json({image: req.files})
 })
