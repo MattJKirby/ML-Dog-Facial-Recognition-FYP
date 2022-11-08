@@ -27,13 +27,13 @@ class ProfileManager:
     profileImages = []
     profileUids = []
 
+    if len(profileDict) == 0:
+      return
+
     for profile in profileDict:
       for path in profileDict[profile]:
         profileUids.append(profile)
-        serverPath = 'http://localhost:5002/' + path.split('public/')[1]
-        response = requests.get(serverPath, stream=True)
-        img = io.BytesIO(response.content)
-        profileImages.append(img)
+        profileImages.append(self.convertPathToImage(path))
 
 
     return(profileUids, image_processor.pre_process_images(profileImages))
