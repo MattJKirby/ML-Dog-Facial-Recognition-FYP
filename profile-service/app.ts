@@ -17,5 +17,5 @@ MongoClient.Connect()
 
 
 server.listen(5002, ():void => {
-  console.log('Service: Running here 👉 https://localhost:')
+  console.log('Service: Running here 👉 https://localhost:5002')
 })
