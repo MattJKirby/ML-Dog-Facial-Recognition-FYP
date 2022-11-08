@@ -1,3 +1,4 @@
+import axios from 'axios'
 import express, { Request, Response } from 'express'
 import multer from 'multer'
 import { register } from 'ts-node'
@@ -31,7 +32,11 @@ ProfileRouter.post('/new',upload.array('image',8) , async (req:Request, res:Resp
   if(req.files == undefined || req.files?.length < 1){
     throw new Error("Please provide at least 4 images")
   }
-  profileManger.NewProfile(req.body.petName, Object.values(req.files))
+  const profile = await profileManger.NewProfile(req.body.petName, Object.values(req.files))
+
+  console.log(profile)
+
+  const response = axios.post('http://localhost:5000/loadProfile', {profileUid: profile.ProfileUid})
 
   res.json({image: req.files})
 })
