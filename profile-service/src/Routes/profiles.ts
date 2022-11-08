@@ -32,11 +32,8 @@ ProfileRouter.post('/new',upload.array('image',8) , async (req:Request, res:Resp
     throw new Error("Please provide at least 4 images")
   }
 
-  const receivedImageArray = Object.values(req.files).map((image: any, index: number) => {
-    return {name: `${image.originalname}_${index}`, fileName: image.originalname, filePath: image.path}
-  })
 
-  profileManger.NewProfile("asdf", receivedImageArray)
+  profileManger.NewProfile(req.body.petName, Object.values(req.files))
 
   res.json({image: req.files})
 })
