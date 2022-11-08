@@ -31,8 +31,6 @@ ProfileRouter.post('/new',upload.array('image',8) , async (req:Request, res:Resp
   if(req.files == undefined || req.files?.length < 1){
     throw new Error("Please provide at least 4 images")
   }
-
-
   profileManger.NewProfile(req.body.petName, Object.values(req.files))
 
   res.json({image: req.files})

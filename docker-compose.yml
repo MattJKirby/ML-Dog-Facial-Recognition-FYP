@@ -1,13 +1,13 @@
 version: '3.9'
 services:
-  recognition-service:
-    build:
-      context: './recognition-service'
-      dockerfile: Dockerfile
-    volumes:
-      - "./recognition-service:/code/"
-    ports:
-      - '5001:5000'
+  # recognition-service:
+  #   build:
+  #     context: './recognition-service'
+  #     dockerfile: Dockerfile
+  #   volumes:
+  #     - "./recognition-service:/code/"
+  #   ports:
+  #     - '5001:5000'
 
   db:
     image: mongo:latest
