@@ -35,7 +35,7 @@ def hello():
 @app.route('/loadProfile', methods=['POST'])
 def newProfile():
   profileUid = request.form.get('ProfileUid')
-  profileData = profileManager.newProfile(profileUid)
+  profileData = profileManager.loadProfiles()
   knn.fitData(recog.generate_image_embeddings(profileData[1]), profileData[0])
 
   return 'This is a test route!'
