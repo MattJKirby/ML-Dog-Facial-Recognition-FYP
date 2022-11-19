@@ -11,6 +11,16 @@ python = "^3.10"
 flask = "^2.2.2"
 pillow = "^9.3.0"
 torch = {url = "https://files.pythonhosted.org/packages/79/b3/eaea3fc35d0466b9dae1e3f9db08467939347b3aaa53c0fd81953032db33/torch-1.13.0-cp310-none-macosx_11_0_arm64.whl"}
+numpy = "^1.23.4"
+pandas = "^1.5.1"
+requests = "^2.28.1"
+torchvision = {url = "https://files.pythonhosted.org/packages/cd/a7/08f0aee45e1d451a4d44e327f4b5f3b5c5767952c03a618f88253f962410/torchvision-0.14.0-cp310-cp310-macosx_11_0_arm64.whl"}
+opencv-python = "^4.6.0.66"
+tqdm = "^4.64.1"
+pyyaml = "^6.0"
+matplotlib = "^3.6.2"
+seaborn = "^0.12.1"
+scipy = "^1.9.3"
 
 
 [build-system]
