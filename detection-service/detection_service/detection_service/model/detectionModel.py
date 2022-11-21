@@ -29,5 +29,3 @@ class DetectionModel():
     img1.rectangle(bbox_parameters, outline ="red")
     plt.imshow(img)
     plt.savefig('plot.png', bbox_inches='tight')
-
-    plt.show()
