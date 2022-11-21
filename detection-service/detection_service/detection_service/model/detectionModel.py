@@ -20,11 +20,11 @@ class DetectionModel():
 
     bbox_parameters = (row['xmin'], row['ymin'], row['xmax'], row['ymax'])
 
-    self.predictImg(img,bbox_parameters)
-    return row
+    self.drawPrediction(img,bbox_parameters)
+    return (bbox_parameters, row)
 
 
-  def predictImg(self,img, bbox_parameters):
+  def drawPrediction(self,img, bbox_parameters):
     img1 = ImageDraw.Draw(img)  
     img1.rectangle(bbox_parameters, outline ="red")
     plt.imshow(img)
