@@ -13,7 +13,8 @@ class DetectionModel():
   def predict(self, img):
     img = Image.open(io.BytesIO(img))
     width, height = img.size
-    result = self.model(img,width,height)
+    img.resize((640,640))
+    result = self.model(img,640,640)
     dataFrame = result.pandas().xyxy[0]
 
     row = dataFrame.iloc[dataFrame['confidence'].idxmax()].to_dict()
@@ -25,7 +26,12 @@ class DetectionModel():
 
 
   def drawPrediction(self,img, bbox_parameters):
-    img1 = ImageDraw.Draw(img)  
-    img1.rectangle(bbox_parameters, outline ="red")
-    plt.imshow(img)
+    img = img.convert("RGBA")
+    boundingLayer = Image.new('RGBA', img.size, (255, 255, 255, 0))
+
+    img1 = ImageDraw.Draw(boundingLayer)
+    img1.rectangle(bbox_parameters, outline ="red", width=3, fill=(255, 0, 0, 0))
+
+    output = Image.alpha_composite(img, boundingLayer)
+    plt.imshow(output)
     plt.savefig('plot.png', bbox_inches='tight')
