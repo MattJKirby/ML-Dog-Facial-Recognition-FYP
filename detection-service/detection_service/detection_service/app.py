@@ -24,16 +24,12 @@ def predict():
   file = request.files['image']
   image = file.read()
   bbox_parameters, prediction = detectionModel.predict(image)
-
   
   try:
-    if prediction['confidence'] < 0.85:
+    if prediction['confidence'] < 0.80:
       raise Exception("Detection does not match confidence constraints.")
 
-    return {
-      "confidence": prediction['confidence'],
-      "detection": imageProcessor.encode_pil_image(imageProcessor.isolateDetection(image, bbox_parameters))
-     }
+    return {"confidence": prediction['confidence'], "detection": imageProcessor.encode_pil_image(imageProcessor.isolateDetection(image, bbox_parameters))}
   except Exception as e:
     print(e)
-    return {'error': 'Error detecting dog face. Please upload a different image.'}
+    return {'error': 'Error detecting dog face: ' + e}
