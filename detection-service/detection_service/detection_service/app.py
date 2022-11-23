@@ -31,5 +31,6 @@ def predict():
 
     detection = imageProcessor.encode_pil_image(imageProcessor.isolateDetection(image, bbox_parameters))
     return {"confidence": prediction['confidence'], "boundingBoxCoordinates": bbox_parameters}
+  
   except Exception as e:
     return {'error': 'Error detecting dog face: ' + e}
