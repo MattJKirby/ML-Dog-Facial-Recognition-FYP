@@ -27,7 +27,7 @@ def predict():
   
   try:
     if prediction['confidence'] < 0.80:
-      raise Exception("Detection does not match confidence constraints.")
+      raise Exception("Detection does not match the required confidence threshold.")
 
     detection = imageProcessor.encode_pil_image(imageProcessor.isolateDetection(image, bbox_parameters))
     return {"confidence": prediction['confidence'], "boundingBoxCoordinates": bbox_parameters}
