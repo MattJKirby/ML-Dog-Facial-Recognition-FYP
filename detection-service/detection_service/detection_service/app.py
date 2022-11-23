@@ -29,7 +29,7 @@ def predict():
     if prediction['confidence'] < 0.80:
       raise Exception("Detection does not match confidence constraints.")
 
-    return {"confidence": prediction['confidence'], "detection": imageProcessor.encode_pil_image(imageProcessor.isolateDetection(image, bbox_parameters))}
+    detection = imageProcessor.encode_pil_image(imageProcessor.isolateDetection(image, bbox_parameters))
+    return {"confidence": prediction['confidence'], "boundingBoxCoordinates": bbox_parameters}
   except Exception as e:
-    print(e)
     return {'error': 'Error detecting dog face: ' + e}
