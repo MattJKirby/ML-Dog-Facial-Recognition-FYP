@@ -19,6 +19,10 @@ def hello():
     print("Hello", file=sys.stderr)
     return 'Detection service is running'
 
+@app.route('/status')
+def statusCheck():
+  return 'Detection service is running'
+
 @app.route('/predict', methods=['POST'])
 def predict():
   file = request.files['image']
