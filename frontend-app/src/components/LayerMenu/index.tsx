@@ -1,7 +1,7 @@
 import useKeyPress from "@/src/hooks/useKeyPress";
 import { Accordion, AccordionPanel, Anchor, Box, Button, Header, Layer, Text } from "grommet";
 import { Add, Close, Search } from "grommet-icons";
-import { PropsWithChildren, FC, useEffect } from "react";
+import { PropsWithChildren, FC, useEffect, MouseEvent } from "react";
 import { ServiceStatusItem } from "../ServiceStatusItem";
 
 type LayerMenuProps = {
@@ -17,16 +17,22 @@ export const LayerMenu:FC<PropsWithChildren<LayerMenuProps>> = ({
   }) => {
     const escape = useKeyPress('Escape');
 
+    const handleOverlayClick = (e: MouseEvent) => {
+      if(e.currentTarget === e.target){
+        setDisplay(false);
+      }
+    };
+
     useEffect(() => {
       if(display && escape){
         setDisplay(false)
       }
-    }, [display, escape, setDisplay])
+    }, [display, escape, setDisplay]); 
 
   return ( 
       <div
         style={{height: '100%', width: '100%', position: 'absolute', background: !display ? 'rgba(118,78,211,0)' : 'rgba(118,78,211,0.2)', visibility: display ? 'visible' : 'hidden', transition: '0.25s'}}
-        // onClick={() => setDisplay(false)}
+        onClick={(e: MouseEvent) => handleOverlayClick(e)}
       >
         <div style={{height: '100%', width: display ? '300px' : '0', background: '#FFF', transition: '0.25s', overflowX: 'hidden'}}>
    
