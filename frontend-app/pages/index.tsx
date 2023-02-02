@@ -53,7 +53,7 @@ export default function Home() {
       <main className={styles.main}>
         <Grommet full theme={theme}>
         <AppBar />
-        <Page>
+        <Page background='bg1' fill='vertical'>
           <PageContent justify='center'>
             <PageHeader
               title="Dog Seach App"
