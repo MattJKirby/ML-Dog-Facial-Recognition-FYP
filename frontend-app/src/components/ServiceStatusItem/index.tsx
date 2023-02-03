@@ -1,13 +1,14 @@
 import { Box, Button, Text } from "grommet";
 import { Refresh } from "grommet-icons";
 import { FC, PropsWithChildren, useEffect, useState } from "react";
+import { Indicator } from "./indicator";
 
 type ServiceStatusItemProps ={
   serviceName: string;
   serviceEndpoint: string;
 }
 
-type ServiceStatus = 'Connected' | 'Waiting' | 'Disconnected'
+export type ServiceStatus = 'Connected' | 'Waiting' | 'Disconnected'
 
 
 export const ServiceStatusItem: FC<PropsWithChildren<ServiceStatusItemProps>> = ({
@@ -36,7 +37,7 @@ export const ServiceStatusItem: FC<PropsWithChildren<ServiceStatusItemProps>> = 
       <Text size='small'>{serviceName}</Text>
       <Box direction="row" align='center'>
         <Button size='small' icon={<Refresh size='small'/>} onClick={() => getStatus()}/>
-        <Text size='xsmall'>{!status ? '🔴' : '🟢'}</Text>
+        <Indicator status={status} />
       </Box> 
     </Box>
   )
