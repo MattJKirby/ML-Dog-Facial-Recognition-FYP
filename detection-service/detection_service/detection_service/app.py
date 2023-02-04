@@ -5,23 +5,25 @@ from detection_service.imageProcessing.imageProcessor import ImageProcessor
 from PIL import Image
 import io
 from flask import Flask, request, jsonify, send_file
+from flask_cors import CORS
 import torch
 
 app = Flask(__name__)
+CORS(app)
+cors = CORS(app, resource={
+    r"/*":{
+        "origins":"*"
+    }
+})
 
 
 detectionModel = DetectionModel('./model/Tsinghua_train3_best.pt')
 imageProcessor = ImageProcessor(minOutputResolution=00)
 
 
-@app.route('/')
-def hello():
-    print("Hello", file=sys.stderr)
-    return 'Detection service is running'
-
 @app.route('/status')
 def statusCheck():
-  return 'Detection service is running'
+  return  {'message': 'Detection service is running', 'statusCode': 200}
 
 @app.route('/predict', methods=['POST'])
 def predict():
