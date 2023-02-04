@@ -26,6 +26,10 @@ export class ProfileManager {
     return await ProfileDataStore.addProfile(uuidv4(), name, this.generateProfileImages(receivedFiles, generatedUid))
   }
 
+  public GetLatestProfiles = async (count: number): Promise<IProfile[]> => {
+    return await ProfileDataStore.getNLatest(count);
+  }
+
   /**
    * Method for generating a list of ProfileImages from the list of file received
    * @param fileArray 

@@ -13,6 +13,15 @@ class ProfileDataStore extends DataStore<any>{
       PetName: name,
       Images: imageArray
     })
+  };
+
+  /**
+   * Store action for getting the latest n pet profiles.
+   * @param itemCount 
+   * @returns 
+   */
+  public getNLatest = async (itemCount: number) => {
+    return await this.Model.find().limit(itemCount).sort({$natural: -1})
   }
   
 }
