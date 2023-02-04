@@ -4,6 +4,7 @@ import { Anchor, Box, Button, Grommet, Menu, Page, PageContent, PageHeader } fro
 import { theme } from '@/src/utils'
 import { AppBar } from '@/src/components/AppBar'
 import { More } from 'grommet-icons'
+import { ProfileScroller } from '@/src/components/ProfileScroller'
 
 const actions = [
   {
@@ -66,6 +67,8 @@ export default function Home() {
               }
               parent={<Anchor label="Home Page" />}
             />
+
+            <ProfileScroller />
             </PageContent>
           </Page>
 
@@ -73,5 +76,6 @@ export default function Home() {
       </main>
     </>
   )
-}
+};
+
 
