@@ -1,6 +1,6 @@
 import { Box, Button, Text } from "grommet";
 import { Refresh } from "grommet-icons";
-import { FC, PropsWithChildren, useEffect, useState } from "react";
+import { FC, PropsWithChildren, useCallback, useEffect, useState } from "react";
 import { Indicator } from "./indicator";
 
 type ServiceStatusItemProps ={
@@ -17,20 +17,28 @@ export const ServiceStatusItem: FC<PropsWithChildren<ServiceStatusItemProps>> = 
   serviceEndpoint
 }) => {
   const [status, setStatus] = useState<ServiceStatus>('Disconnected');
+  const [initialCall, setInitialCall] = useState<boolean>(false);
   const [msg, setMsg] = useState<string>('');
 
 
-  const getStatus = async () => {
+  const getStatus = useCallback(async () => {
     setStatus('Waiting');
-    const statusResult = await fetch(serviceEndpoint);
-    setMsg(statusResult[1].data.body);
-
-    if(statusResult[0]){
-      setStatus('Connected');
-    } else {
-      setStatus('Disconnected');
+    try {
+      const statusResult = await indicatorAPICall(serviceEndpoint);
+      setStatus("Connected");
+    } catch (err) {
+      setStatus("Disconnected");
+      console.log(err);
     }
-  }
+  }, [serviceEndpoint])
+
+  useEffect(() => {
+    if(!initialCall){
+      setInitialCall(true)
+      getStatus()
+    }
+  }, [getStatus, initialCall])
+
 
   return (
     <Box style={{whiteSpace: 'nowrap'}} direction="row" width={"100%"} align='center' justify="between">
@@ -43,15 +51,19 @@ export const ServiceStatusItem: FC<PropsWithChildren<ServiceStatusItemProps>> = 
   )
 }
 
-const fetch = async (url: string): Promise<[boolean, any]> => {
-
-  try{
-    const res = fetch(url)
-    return [true, await res.data];
-
-  } catch (err) {
-    return [false, err];
+const indicatorAPICall = async (url: string) => {
+  const reqOptions = {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json'
+    },
   }
-  
-}
+  const res = await fetch(url, reqOptions);
+  const data = await res.json();
+
+  if(data.statusCode !== 200){
+    throw new Error(data.message)
+  }
+  return data;
+};
 
