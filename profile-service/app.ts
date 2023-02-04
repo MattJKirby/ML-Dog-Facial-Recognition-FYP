@@ -1,9 +1,16 @@
 import express, { Application } from 'express'
 import { initializeRoutes } from './src/Startup/routes'
 import { MongoConnectionProvider } from './src/Database/Utility/MongoConnectionProvider'
+import cors from 'cors';
 
 // Server configuration
-const server:Application = express()
+const server:Application = express();
+
+const corsOptions = {
+  origin: ['http://localhost:3001'],
+};
+
+server.use(cors(corsOptions))
 
 // Configure static resources
 server.use(express.static(__dirname + '/public'));
