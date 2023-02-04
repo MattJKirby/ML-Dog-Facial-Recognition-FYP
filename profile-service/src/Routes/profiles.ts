@@ -35,6 +35,19 @@ ProfileRouter.post('/new',upload.array('image',8) , async (req:Request, res:Resp
   res.json({image: req.files})
 })
 
+ProfileRouter.post('/latest', async (req:Request, res:Response): Promise<void> => {
+  const count = req.body.latestCount;
+  
+  if(count === undefined || count < 1 || count > 10){
+    throw new Error("Invalid latest post value")
+    res.json({message: 'Invalid latest post value', httpCode: 400})
+  };
+
+  const profiles = await profileManger.GetLatestProfiles(count)
+
+  res.json({profiles: profiles, statusCode: 200});
+})
+
 ProfileRouter.get('/new', async (req:Request, res:Response): Promise<void> => {
 
   res.send("This works")
