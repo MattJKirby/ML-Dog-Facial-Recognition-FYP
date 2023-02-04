@@ -6,6 +6,6 @@ export const IndexRouter = express.Router()
  * GET '/'
  * Returns a string
  */
-IndexRouter.get('/', (req:Request, res:Response): void => {
-  res.send('Service \'ProfileService\' is running')
+IndexRouter.get('/status', (req:Request, res:Response): void => {
+  res.json({'message': 'Service \'ProfileService\' is running', statusCode: 200})
 })
