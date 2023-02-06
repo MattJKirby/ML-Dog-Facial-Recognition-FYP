@@ -57,7 +57,7 @@ export default function Home() {
         <Page background='bg1' fill='vertical'>
           <PageContent justify='center'>
             <PageHeader
-              title="Dog Seach App"
+              title="Dog Identifier"
               subtitle={`Grommet helps you build responsive and accessible mobile-first projects for the web with an easy to use component 
               library.`}
               actions={
