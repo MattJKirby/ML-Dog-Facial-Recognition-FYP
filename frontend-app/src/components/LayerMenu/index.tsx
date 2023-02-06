@@ -3,6 +3,7 @@ import { Accordion, AccordionPanel, Anchor, Box, Button, Header, Layer, Text } f
 import { Add, Close, Search } from "grommet-icons";
 import { PropsWithChildren, FC, useEffect, MouseEvent } from "react";
 import { ServiceStatusItem } from "../ServiceStatusItem";
+import Router from 'next/router';
 
 type LayerMenuProps = {
   display: boolean;
@@ -27,11 +28,18 @@ export const LayerMenu:FC<PropsWithChildren<LayerMenuProps>> = ({
       if(display && escape){
         setDisplay(false)
       }
-    }, [display, escape, setDisplay]); 
+    }, [display, escape, setDisplay]);
+
+    const pushToUrl = (url: string) => {
+      const { pathname } = Router
+      if(pathname !== url){
+        Router.push(url)
+      }
+    }
 
   return ( 
       <div
-        style={{height: '100%', width: '100%', position: 'absolute', background: !display ? 'rgba(118,78,211,0)' : 'rgba(118,78,211,0.2)', visibility: display ? 'visible' : 'hidden', transition: '0.25s'}}
+        style={{height: '100%', width: '100%', position: 'absolute', background: !display ? 'rgba(118,78,211,0)' : 'rgba(118,78,211,0.1)', visibility: display ? 'visible' : 'hidden', transition: '0.25s'}}
         onClick={(e: MouseEvent) => handleOverlayClick(e)}
       >
         <div style={{height: '100%', width: display ? '300px' : '0', background: '#FFF', transition: '0.25s', overflowX: 'hidden'}}>
@@ -63,7 +71,7 @@ export const LayerMenu:FC<PropsWithChildren<LayerMenuProps>> = ({
                 </Header>
                 <Box pad='small'>
                   <Anchor weight='light' color={"#000"} margin='xsmall' label='Search' alignSelf='stretch' />
-                  <Anchor weight='light' color={"#000"} margin='xsmall' label='Upload profile' style={{whiteSpace: 'nowrap'}}/>
+                  <Anchor weight='light' color={"#000"} margin='xsmall' label='Upload profile' style={{whiteSpace: 'nowrap'}} onClick={() => pushToUrl('/upload')}/>
                 </Box>
               </Box>
 
