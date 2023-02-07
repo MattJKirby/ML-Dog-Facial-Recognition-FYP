@@ -7,6 +7,7 @@ import io
 from flask import Flask, request, jsonify, send_file
 from flask_cors import CORS
 import torch
+import json
 
 app = Flask(__name__)
 CORS(app)
@@ -27,16 +28,23 @@ def statusCheck():
 
 @app.route('/predict', methods=['POST'])
 def predict():
-  file = request.files['image']
-  image = file.read()
-  bbox_parameters, prediction = detectionModel.predict(image)
-  
-  try:
-    if prediction['confidence'] < 0.80:
-      raise Exception("Detection does not match the required confidence threshold.")
 
-    detection = imageProcessor.encode_pil_image(imageProcessor.isolateDetection(image, bbox_parameters))
-    return {"confidence": prediction['confidence'], "boundingBoxCoordinates": bbox_parameters}
+  results = []
+
+  for file in request.files:
+    file = request.files[file]
+    image = file.read()
+    bbox_parameters, prediction = detectionModel.predict(image)
   
-  except Exception as e:
-    return {'error': 'Error detecting dog face: ' + e}
+    try:
+      if prediction['confidence'] < 0.80:
+        raise Exception("Detection does not match the required confidence threshold.")
+
+      detection = imageProcessor.encode_pil_image(imageProcessor.isolateDetection(image, bbox_parameters))
+      results.append({'name': file.filename,'confidence': prediction['confidence'], "boundingBoxCoordinates": bbox_parameters})
+      # return {"confidence": prediction['confidence'], "boundingBoxCoordinates": bbox_parameters, "statusCode": 200}
+    
+    except Exception as e:
+      results.append({'name': file.filename, 'error': 'Error detecting dog face: ' + str(e)})
+
+  return{"statusCode": 200, 'results': results}
