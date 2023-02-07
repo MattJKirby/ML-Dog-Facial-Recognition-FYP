@@ -6,14 +6,14 @@ import style from "styled-jsx/style"
 import Image from "next/image";
 
 type ImageUploaderProps = {
-  onValidUpload: (results: any) => void;
+  onValidUpload: (results: any, files: File[]) => void;
 }
 
 export const ImageUploader:FC<PropsWithChildren<ImageUploaderProps>> = ({onValidUpload}) => {
   const [value, setValue] = useState<{file: File[]} | undefined>(undefined);
   const [validUpload, setValidUpload] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
-  const [falseDetections, setFalseDetections] = useState<string[]>([])
+  const [falseDetections, setFalseDetections] = useState<string[]>([]);
 
 
 
@@ -31,9 +31,6 @@ export const ImageUploader:FC<PropsWithChildren<ImageUploaderProps>> = ({onValid
     
   },[value]);
 
-  useEffect(() => {
-    console.log(value)
-  },[value])
 
   const handleAPICall = (e: any) => {
     try{
@@ -47,8 +44,8 @@ export const ImageUploader:FC<PropsWithChildren<ImageUploaderProps>> = ({onValid
           }
         });
 
-        if(validUpload){
-          onValidUpload(res.results);
+        if(validUpload && value){
+          onValidUpload(res.results, value.file);
         };
       })
       
@@ -97,7 +94,6 @@ export const ImageUploader:FC<PropsWithChildren<ImageUploaderProps>> = ({onValid
 }
 
 const photoUploadAPICall = async (event: any, url: string) => {
-  console.log(event.value.file)
   const formData = new FormData();
   event.value.file.forEach((file: File, index: number) => formData.append(`image${index}`, file));
 
