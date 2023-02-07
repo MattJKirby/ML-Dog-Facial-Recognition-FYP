@@ -45,6 +45,6 @@ def predict():
       # return {"confidence": prediction['confidence'], "boundingBoxCoordinates": bbox_parameters, "statusCode": 200}
     
     except Exception as e:
-      results.append({'name': file.filename, 'error': 'Error detecting dog face: ' + str(e)})
+      results.append({'name': file.filename, 'error': 'Error detecting dog face: ' + str(e),'confidence': prediction['confidence'] })
 
   return{"statusCode": 200, 'results': results}
