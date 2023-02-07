@@ -3,6 +3,7 @@ import { Anchor, Box, Button, FileInput, Form, Grommet, Menu, Page, PageContent,
 import { theme } from '@/src/utils'
 import { useState } from "react";
 import { ImageUploader } from "@/src/components/ImageUploader";
+import { ImageCropper } from "@/src/components/ImageUploader/imageCropper";
 
 export type PreviewImage = {
   name: string;
@@ -12,7 +13,17 @@ export type PreviewImage = {
 
 
 const Upload = () => {
+  const [uploader, setUploader] = useState<boolean>(true);
+  const [cropper, setCropper] = useState<boolean>(false);
+  const [detectionResults, setDetectionResults] = useState<any>(undefined);
+  const [detectionImages, setDetectionImages] = useState<any[]>([])
 
+  const onValidUpload = (results: any, images: File[]) => {
+    setUploader(false);
+    setCropper(true);
+    setDetectionResults(results);
+    setDetectionImages(images);
+  }
 
   return(
     <>
@@ -28,7 +39,14 @@ const Upload = () => {
             />
               <Box>
                 <Box style={{maxWidth: '800px'}}>
-                  <ImageUploader />
+                  {uploader && 
+                    <ImageUploader onValidUpload={(results:any, images: File[]) => onValidUpload(results, images)}/>
+                  }
+
+                  {cropper &&
+                    <ImageCropper results={detectionResults} images={detectionImages}/>
+                  }
+                  
                 </Box>
               </Box>
             </Box>
