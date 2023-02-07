@@ -15,7 +15,7 @@ export const ImageUploader = () => {
   useEffect(() => {
     if(value !== undefined){
       const valueCount = value.file.length;
-      if(valueCount > 3 && valueCount < 9){
+      if(valueCount > 0 && valueCount < 9){
         setValidUpload(true);
         setError('')
       } else {
@@ -35,14 +35,14 @@ export const ImageUploader = () => {
       value={value}
       onChange={nextValue => setValue(nextValue)}
       onReset={() => setValue({})}
-      onSubmit={({ value }) => {}}
+      onSubmit={(event: any) => photoUploadAPICall(event, 'http://127.0.0.1:5000/predict')}
     >
-      <FormField name="Image Upload" htmlFor="text-input-id" label="Upload images">
+      <FormField name="files" htmlFor="text-input-id" label="Upload images">
         <FileInput
           multiple={true}
           name="file"
           max={8}
-          min={4}
+          min={1}
         />
       </FormField>
       <Box fill='horizontal' margin='1em'>
@@ -68,3 +68,22 @@ export const ImageUploader = () => {
       </Form>
   )
 }
+
+const photoUploadAPICall = async (event: any, url: string) => {
+  console.log(event.value.file)
+  const formData = new FormData();
+  event.value.file.forEach((file: File, index: number) => formData.append(`image${index}`, file));
+
+  const reqOptions = {
+    method: 'POST',
+    body: formData
+  }
+  // const res = await fetch(url, reqOptions);
+  const res = await fetch(url, reqOptions);
+  const data = await res.json();
+
+  if(data.statusCode !== 200){
+    throw new Error(data.message)
+  }
+  return data;
+};
