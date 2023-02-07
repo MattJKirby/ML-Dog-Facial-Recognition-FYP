@@ -1,14 +1,19 @@
 import { PreviewImage } from "@/pages/upload";
 import {FormField, FileInput, Box, Grid, Button, Form, Text } from "grommet"
 import error from "next/error"
-import { useEffect, useState } from "react";
+import { FC, PropsWithChildren, useEffect, useState } from "react";
 import style from "styled-jsx/style"
 import Image from "next/image";
 
-export const ImageUploader = () => {
+type ImageUploaderProps = {
+  onValidUpload: (results: any) => void;
+}
+
+export const ImageUploader:FC<PropsWithChildren<ImageUploaderProps>> = ({onValidUpload}) => {
   const [value, setValue] = useState<{file: File[]} | undefined>(undefined);
   const [validUpload, setValidUpload] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
+  const [falseDetections, setFalseDetections] = useState<string[]>([])
 
 
 
@@ -30,12 +35,33 @@ export const ImageUploader = () => {
     console.log(value)
   },[value])
 
+  const handleAPICall = (e: any) => {
+    try{
+      setFalseDetections([]);
+      photoUploadAPICall(e, 'http://127.0.0.1:5000/predict').then((res) => {
+        res.results.forEach((result: any) => {
+          if(result.error !== undefined){
+            setValidUpload(false);
+            setFalseDetections(prev => [...prev, result.name])
+            setError(`${result.error} Please remove or replace the image.`)
+          }
+        });
+
+        if(validUpload){
+          onValidUpload(res.results);
+        };
+      })
+      
+    } catch (err){
+      setError(`Error uploading images. Please try again.`)
+    }
+  }
+
   return (
     <Form
       value={value}
       onChange={nextValue => setValue(nextValue)}
-      onReset={() => setValue({})}
-      onSubmit={(event: any) => photoUploadAPICall(event, 'http://127.0.0.1:5000/predict')}
+      onSubmit={(event: any) => handleAPICall(event)}
     >
       <FormField name="files" htmlFor="text-input-id" label="Upload images">
         <FileInput
@@ -53,8 +79,9 @@ export const ImageUploader = () => {
           gap="small"
         >
           {value && value.file.map((file, index) => {
+            const hasError = falseDetections.includes(file.name)
             return (
-            <Box key={index} style={{width: '100px', height: '100px', boxSizing: 'content-box'}} border={{color: 'brand'}} background='bg2'>
+            <Box key={index} style={{width: '100px', height: '100px', boxSizing: 'content-box'}} border={{color: hasError ? 'red':'brand'}} background='bg2'>
               <Image alt={file.name} style={{objectFit: 'contain'}} width={100} height={100}  src={URL.createObjectURL(file)}></Image>
             </Box>
             )
