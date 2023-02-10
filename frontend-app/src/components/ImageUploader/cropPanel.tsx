@@ -33,6 +33,7 @@ export const CropPanel: FC<PropsWithChildren<CroppedProps>> = ({
   const src = URL.createObjectURL(image);
   const [crop, setCrop] = useState<Crop>(generateInitialCrop(bbox));
   const [output, setOutput] = useState<string | null>(null);
+  const [edit, setEdit] = useState<boolean>(false);
 
   const handleChange = (c: PixelCrop) => {
     setCrop(c);
@@ -41,7 +42,6 @@ export const CropPanel: FC<PropsWithChildren<CroppedProps>> = ({
 
   const generateCroppedPreview = useCallback(() => {
       const imgFromRef = imgRef.current
-
       if(imgFromRef !== null){
         const canvas = document.createElement('canvas');
         const context = canvas.getContext('2d');
@@ -69,20 +69,30 @@ export const CropPanel: FC<PropsWithChildren<CroppedProps>> = ({
     }
   },[crop.height, crop.width, crop.x, crop.y, image.name, onOutputChange]);
 
+  const handleAccept = () => {
+    setEdit(false);
+    onAccept();
+  }
+
   return ( 
     <Box  style={{height: '100%', width: '100%', position: 'absolute', background: !display ? 'rgba(255,255,255,0)' : 'rgba(255,255,255,0.6)', visibility: display ? 'visible' : 'hidden', top: '0', left: '0'}}>
       <Box style={{width: '100%', height: '100%', position: 'relative', border: '1px solid blue', justifyContent: 'center', alignItems: 'center', display: 'flex'}}>
         <Box>
           <ReactCrop
-          crop={crop} 
+          crop={edit ? crop : undefined} 
+          locked={!edit}
           onChange={c => handleChange(c)} 
           onComplete={() => generateCroppedPreview()}
         >
           <img ref={imgRef} src={src} onLoad={() => generateCroppedPreview()}/>
         </ReactCrop>
-        <Box direction='row' pad='small'>
-          <Button primary onClick={() => onAccept()} label="Accept" />
-          <Button secondary onClick={() => setCrop(generateInitialCrop(bbox))} label='Reset' />
+        <Box direction='row' pad='small' justify='between'>
+        <Button primary onClick={() => handleAccept()} label="Close" />
+          <Box direction='row'>
+            <Button secondary disabled={!edit}  onClick={() => setCrop(generateInitialCrop(bbox))} label='Reset' />
+            <Button secondary disabled={edit} onClick={() => {setEdit(true)}} label='Edit' />
+          </Box>
+          
         </Box>
         
           
