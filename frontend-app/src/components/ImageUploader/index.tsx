@@ -60,7 +60,7 @@ export const ImageUploader:FC<PropsWithChildren<ImageUploaderProps>> = ({onValid
       onChange={nextValue => setValue(nextValue)}
       onSubmit={(event: any) => handleAPICall(event)}
     >
-      <FormField name="files" htmlFor="text-input-id" label="Upload images">
+      <FormField name="files" htmlFor="text-input-id">
         <FileInput
           multiple={true}
           name="file"
