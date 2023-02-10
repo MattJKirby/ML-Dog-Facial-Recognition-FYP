@@ -19,12 +19,11 @@ export const ImageCropper: FC<PropsWithChildren<ImageCropperProps>> = ({results,
     }
   }
 
-
   return (
     <Box>
       {images && images.map((img) => {
         const result = results.find((r) => r.name === img.name);
-        if(result){
+        if(result && result.boundingBoxCoordinates !== undefined){
           return <CropPanel 
             key={img.name} 
             bbox={result.boundingBoxCoordinates} 
@@ -40,11 +39,11 @@ export const ImageCropper: FC<PropsWithChildren<ImageCropperProps>> = ({results,
       <Box direction="row" >
         {Array.from(croppedOutputs.entries()).map(output => {
           return (
-            <Box key={output[0]} style={{width: "200px"}} margin='small' align="center">
-              <Box style={{width: '200px', height: '200px', boxSizing: 'content-box'}} background='bg2'>
-                <Image alt={output[0]} style={{objectFit: 'contain'}} width={200} height={200}  src={output[1]}></Image>
+            <Box key={output[0]}  margin='medium' align="center">
+              <Box style={{width: '100px', height: '100px', boxSizing: 'content-box', display: 'flex'}} background='bg2' pad='small' >
+                <Image alt={output[0]} style={{objectFit: 'contain'}} height={100} src={output[1]}></Image>
               </Box>
-              <Button size="small" onClick={() => setEdit(output[0])} label="Edit" margin={'small'}/>
+              <Button size="small" onClick={() => setEdit(output[0])} label="View" margin={'small'}/>
             </Box>
             )
         })}
