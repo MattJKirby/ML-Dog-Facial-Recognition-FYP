@@ -37,6 +37,8 @@ export const ProfileScroller = () => {
         })
         setProfiles(data)
         setLoading(false)
+      }).catch(err => {
+        console.log(err)
       })
   }, [])
 
