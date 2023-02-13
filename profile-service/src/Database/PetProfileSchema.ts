@@ -15,10 +15,25 @@ const PetProfileSchema = new Schema({
     required: true
   },
 
-  // PetBreed: {
-  //   type: String,
-  //   required: true
-  // },
+  PetBreed: {
+    type: String,
+    required: true
+  },
+
+  OwnerFirstName: {
+    type: String,
+    required: true
+  },
+
+  OwnerLastName: {
+    type: String,
+    required: true
+  },
+
+  OwnerMobileNumber: {
+    type: String,
+    required: true
+  },
 
   // PetAge: {
   //   type: Number,
@@ -30,7 +45,7 @@ const PetProfileSchema = new Schema({
   Images: {
     type: [ImageSchema],
     required: true,
-    minLength: 2,
+    minLength: 4,
     maxLength: 8
   }  
 })
