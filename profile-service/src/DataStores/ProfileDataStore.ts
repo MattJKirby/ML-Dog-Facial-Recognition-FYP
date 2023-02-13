@@ -7,10 +7,14 @@ import { DataStore } from './DataStore';
  */
 class ProfileDataStore extends DataStore<any>{
 
-  public addProfile = async (uid: string, name: string, imageArray: any[]) => {
+  public addProfile = async (uid: string, name: string, breed: string, ownerFName: string, ownerLName: string, ownerMob: string,imageArray: any[]) => {
     return await this.Model.create({
       ProfileUid: uid,
       PetName: name,
+      Breed: breed,
+      OwnerFirstName: ownerFName,
+      OwnerLastName: ownerLName,
+      OwnerMobileNumber: ownerMob,
       Images: imageArray
     })
   };
