@@ -86,7 +86,7 @@ export const CropPanel: FC<PropsWithChildren<CroppedProps>> = ({
         >
           <img ref={imgRef} src={src} onLoad={() => generateCroppedPreview()}/>
         </ReactCrop>
-        <Box direction='row' pad='small' justify='between'>
+        <Box direction='row' pad='small' justify='between' background={'#FFF'}>
         <Button primary onClick={() => handleAccept()} label="Close" />
           <Box direction='row'>
             <Button secondary disabled={!edit}  onClick={() => setCrop(generateInitialCrop(bbox))} label='Reset' />
