@@ -1,9 +1,10 @@
 import { PreviewImage } from "@/pages/upload";
-import {FormField, FileInput, Box, Grid, Button, Form, Text } from "grommet"
+import {FormField, FileInput, Box, Grid, Button, Form, Text, Spinner } from "grommet"
 import error from "next/error"
 import { FC, PropsWithChildren, useEffect, useState } from "react";
 import style from "styled-jsx/style"
 import Image from "next/image";
+import { Network } from "grommet-icons";
 
 type ImageUploaderProps = {
   onValidUpload: (results: any, files: File[]) => void;
@@ -14,13 +15,12 @@ export const ImageUploader:FC<PropsWithChildren<ImageUploaderProps>> = ({onValid
   const [validUpload, setValidUpload] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
   const [falseDetections, setFalseDetections] = useState<string[]>([]);
-
-
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     if(value !== undefined){
       const valueCount = value.file.length;
-      if(valueCount > 0 && valueCount < 9){
+      if(valueCount > 3 && valueCount < 9){
         setValidUpload(true);
         setError('')
       } else {
@@ -33,34 +33,44 @@ export const ImageUploader:FC<PropsWithChildren<ImageUploaderProps>> = ({onValid
 
 
   const handleAPICall = (e: any) => {
-    try{
-      setFalseDetections([]);
-      photoUploadAPICall(e, 'http://127.0.0.1:5000/predict').then((res) => {
-        res.results.forEach((result: any) => {
-          if(result.error !== undefined){
-            setValidUpload(false);
-            setFalseDetections(prev => [...prev, result.name])
-            setError(`${result.error} Please remove or replace the image.`)
-          }
-        });
+    setLoading(true);
+    setFalseDetections([]);
+    const fds = []
+    photoUploadAPICall(e, 'http://127.0.0.1:5000/predict').then((res) => {
+      res.results.forEach((result: any) => {
+        console.log(result)
+        if(result.error !== undefined){
+          console.log("Error")
+          setValidUpload(false);
+          fds.push(result.name)
+          setFalseDetections(prev => [...prev, result.name])
+          setError(`${result.error} Please remove or replace the image.`)
+        }
+      });
 
-        if(validUpload && value){
-          onValidUpload(res.results, value.file);
-        };
-      })
+
+      if(fds.length === 0 && value){
+        onValidUpload(res.results, value.file);
+      };
       
-    } catch (err){
+    }).catch(err => {
       setError(`Error uploading images. Please try again.`)
-    }
+    }).finally(() => {
+      setLoading(false)
+    });
+
   }
 
   return (
+    <Box pad={{top: 'small'}}>
+
+
     <Form
       value={value}
       onChange={nextValue => setValue(nextValue)}
-      onSubmit={(event: any) => handleAPICall(event)}
+      onSubmit={(e) => handleAPICall(e)}
     >
-      <FormField name="files" htmlFor="text-input-id">
+      <FormField name="files" htmlFor="text-input-id" label={'Upload Images'}>
         <FileInput
           multiple={true}
           name="file"
@@ -87,9 +97,11 @@ export const ImageUploader:FC<PropsWithChildren<ImageUploaderProps>> = ({onValid
         </Box>
         <Box>
           <Text>{error}</Text>
-          <Button label="Next" primary disabled={!validUpload} type='submit'/>
+          <Button label={!loading ? 'Get Face Detections' : ' '} primary disabled={!validUpload || loading} icon={loading? <Spinner /> : undefined} type='submit'/>
+          
         </Box>
       </Form>
+      </Box>
   )
 }
 
