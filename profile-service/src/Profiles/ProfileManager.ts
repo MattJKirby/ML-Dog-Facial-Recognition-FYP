@@ -16,14 +16,14 @@ export class ProfileManager {
    * @param name 
    * @param receivedFiles 
    */
-  public NewProfile = async (name: string, receivedFiles: Express.Multer.File[] ): Promise<IProfile> => {
+  public NewProfile = async (name: string, breed: string, ownerFName: string, ownerLName: string, mobileNumber: string, receivedFiles: Express.Multer.File[] ): Promise<IProfile> => {
     const generatedUid = uuidv4()
 
     if(await ProfileDataStore.GetItem({ProfileUid: generatedUid}) !== null){
       throw new Error(`Error creating profile! profile with UID '${generatedUid}' already exists.`)
     }
 
-    return await ProfileDataStore.addProfile(uuidv4(), name, this.generateProfileImages(receivedFiles, generatedUid))
+    return await ProfileDataStore.addProfile(uuidv4(), name, breed, ownerFName, ownerLName, mobileNumber, this.generateProfileImages(receivedFiles, generatedUid))
   }
 
   public GetLatestProfiles = async (count: number): Promise<IProfile[]> => {
