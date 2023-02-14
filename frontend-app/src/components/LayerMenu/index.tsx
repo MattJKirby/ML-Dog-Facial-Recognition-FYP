@@ -84,7 +84,7 @@ export const LayerMenu:FC<PropsWithChildren<LayerMenuProps>> = ({
                     {/* <Text>Services</Text> */}
                     <ServiceStatusItem serviceName="Profile Service" serviceEndpoint="http://localhost:5002/status"/>
                     <ServiceStatusItem serviceName="Detection Service" serviceEndpoint="http://127.0.0.1:5000/status"/>
-                    {/* <ServiceStatusItem serviceName="Recognition Service" serviceEndpoint="http://127.0.0.1:5000/status"/> */}
+                    <ServiceStatusItem serviceName="Recognition Service" serviceEndpoint="http://127.0.0.1:5001/status"/>
                   </Box>
                 </AccordionPanel>
               </Accordion>
