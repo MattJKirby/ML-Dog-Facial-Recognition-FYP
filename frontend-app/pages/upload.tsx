@@ -17,7 +17,7 @@ const Upload = () => {
   const [cropper, setCropper] = useState<boolean>(false);
   const [detectionResults, setDetectionResults] = useState<any>(undefined);
   const [detectionImages, setDetectionImages] = useState<any[]>([]);
-  const [value, setValue] = useState<any>({});
+  const [value, setValue] = useState<any>({dogName: '', breed: '',ownerfName: '', ownerlName: '', phoneNumber: ''});
   const [breedsList, setBreedsList] = useState<string[]>([]);
   const [selectedBreed, setSelectedBreed] = useState<string>('')
   const [ready, setReady] = useState<boolean>(false);
@@ -39,6 +39,12 @@ const Upload = () => {
     setReady(true)
   }
 
+  const handleFormSumbit = (value: any) => {
+    if(detectionImages.length > 3){
+      newProfileApiCall('http://localhost:5001', value, detectionImages)
+    }
+  }
+
   return(
     <>
       <Grommet full theme={theme}>
@@ -51,7 +57,7 @@ const Upload = () => {
                 value={value}
                 onChange={nextValue => setValue(nextValue)}
                 onReset={() => setValue({})}
-                onSubmit={({ value }) => {}}
+                onSubmit={({ value }) => handleFormSumbit(value)}
                 style={{width: "100%"}}
               >
                  <PageHeader
@@ -59,7 +65,7 @@ const Upload = () => {
                 subtitle="Upload a profile to register a missing dog into out database."
                 parent={<Anchor label="Parent Page" />}
                 actions={ <Box direction="row" gap="medium">
-                <Button disabled={!ready && !checked} type="submit" primary label="Submit" />
+                <Button disabled={!ready && checked} type="submit" primary label="Submit" />
                 <Button type="reset" label="Reset" onClick={() => Router.reload()} />
               </Box>}
                 />
@@ -67,11 +73,13 @@ const Upload = () => {
                   <FormField name="Your pet's name" htmlFor="dogName" label="Pet's name">
                     <TextInput id="dogName" name="dogName" required/>
                   </FormField>
-                  <FormField name="Breed" htmlFor="dogName" label="Breed" required>
+                  <FormField name="Breed" htmlFor="dogName" label="Breed">
                   <Select
+                    id="breed"
+                    name="breed"
                     value={selectedBreed}
                     options={breedsList}
-                    onChange={({ option }) => option !== undefined ? setSelectedBreed(option) : undefined}
+                    onChange={({ option }) => {setSelectedBreed(option)}}
                     required
                   />
                   </FormField>
@@ -128,4 +136,24 @@ const formOptionsApiCall = async (url: string) => {
   }
   return data;
 };
+
+const newProfileApiCall = async (url: string, value: any, images: File[]) => {
+  const formData = new FormData();
+  images.forEach((file: File, index: number) => formData.append(`image${index}`, file));
+  formData.append('formData', value)
+
+  const reqOptions = {
+    method: 'POST',
+    body: formData
+  }
+  // const res = await fetch(url, reqOptions);
+  const res = await fetch(url, reqOptions);
+  const data = await res.json();
+
+  if(data.statusCode !== 200){
+    throw new Error(data.message)
+  }
+  return data;
+};
+
 
