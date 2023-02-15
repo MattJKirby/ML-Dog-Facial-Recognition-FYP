@@ -5,6 +5,7 @@ import { FC, PropsWithChildren, useEffect, useState } from "react";
 import style from "styled-jsx/style"
 import Image from "next/image";
 import { Network } from "grommet-icons";
+import Jimp from "jimp";
 
 type ImageUploaderProps = {
   onValidUpload: (results: any, files: File[]) => void;
@@ -103,6 +104,15 @@ export const ImageUploader:FC<PropsWithChildren<ImageUploaderProps>> = ({onValid
       </Form>
       </Box>
   )
+}
+
+const pngToJpeg = () => {
+  Jimp.read('', (err, img) => {
+    if(err){
+      console.log(err);
+      return;
+    }
+  })
 }
 
 const photoUploadAPICall = async (event: any, url: string) => {
