@@ -11,7 +11,7 @@ class ProfileDataStore extends DataStore<any>{
     return await this.Model.create({
       ProfileUid: uid,
       PetName: name,
-      Breed: breed,
+      PetBreed: breed,
       OwnerFirstName: ownerFName,
       OwnerLastName: ownerLName,
       OwnerMobileNumber: ownerMob,

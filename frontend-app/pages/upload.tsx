@@ -11,13 +11,21 @@ export type PreviewImage = {
   src: string;
 }
 
+type formData = {
+  dogName: string,
+  breed: string,
+  ownerfName: string,
+  ownerlName: string,
+  phoneNumber: string
+ }
+
 
 const Upload = () => {
   const [uploader, setUploader] = useState<boolean>(true);
   const [cropper, setCropper] = useState<boolean>(false);
   const [detectionResults, setDetectionResults] = useState<any>(undefined);
   const [detectionImages, setDetectionImages] = useState<any[]>([]);
-  const [value, setValue] = useState<any>({dogName: '', breed: '',ownerfName: '', ownerlName: '', phoneNumber: ''});
+  const [value, setValue] = useState<formData>({dogName: '', breed: '',ownerfName: '', ownerlName: '', phoneNumber: ''});
   const [breedsList, setBreedsList] = useState<string[]>([]);
   const [selectedBreed, setSelectedBreed] = useState<string>('')
   const [ready, setReady] = useState<boolean>(false);
@@ -41,7 +49,7 @@ const Upload = () => {
 
   const handleFormSumbit = (value: any) => {
     if(detectionImages.length > 3){
-      newProfileApiCall('http://localhost:5001', value, detectionImages)
+      newProfileApiCall('http://localhost:5002/profiles/new', value, detectionImages)
     }
   }
 
@@ -137,10 +145,10 @@ const formOptionsApiCall = async (url: string) => {
   return data;
 };
 
-const newProfileApiCall = async (url: string, value: any, images: File[]) => {
+const newProfileApiCall = async (url: string, value: formData, images: File[]) => {
   const formData = new FormData();
-  images.forEach((file: File, index: number) => formData.append(`image${index}`, file));
-  formData.append('formData', value)
+  images.forEach((file: File, index: number) => formData.append(`image`, file));
+  Object.entries(value).forEach(entry => formData.append(entry[0], entry[1]))
 
   const reqOptions = {
     method: 'POST',
