@@ -15,10 +15,6 @@ from flask_cors import CORS
 
 app = Flask(__name__)
 
-if __name__ == "__main__":
-  app.run(host="localhost", port=8000, debug=True)
-
-
 CORS(app)
 cors = CORS(app, resource={
     r"/*":{
@@ -32,6 +28,7 @@ profileManager = ProfileManager(db_connector)
 recog = RecognitionService('./model/dog_face_model_00888_val_loss_weights.hdf5')
 knn = NearestNeighbourClassifier()
 profileData = profileManager.loadProfiles()
+image_processor = ImageProcessor()
 
 knn.fitData(recog.generate_image_embeddings(profileData[1]), profileData[0])
 
@@ -48,4 +45,21 @@ def newProfile():
   knn.fitData(recog.generate_image_embeddings(profileData[1]), profileData[0])
 
   return 'This is a test route!'
+
+@app.route('/predict', methods=['POST'])
+def predict():
+  print(request.files['target'])
+
+  try:
+    file = request.files['target']
+    
+    imgs = image_processor.pre_process_images([file])
+    embeddings = recog.generate_image_embeddings(imgs)
+
+    result = knn.predict(embeddings)
+    print(result)
+  except Exception as e:
+    print(e)
+
+  return 'asdf'
 
