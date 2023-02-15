@@ -37,3 +37,9 @@ class NearestNeighbourClassifier:
 
     self.knn.fit(data_2d, labels)
     print(self.knn.n_samples_fit_)
+
+  def predict(self, img):
+    print(img.shape)
+    data_2d = img.reshape(1,-1)
+
+    return self.knn.predict(data_2d)
