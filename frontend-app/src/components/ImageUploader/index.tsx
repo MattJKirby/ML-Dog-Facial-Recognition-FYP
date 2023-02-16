@@ -7,10 +7,10 @@ import Image from "next/image";
 import e from "cors";
 
 type ImageUploaderProps = {
-  onValidUpload: (results: any, files: File[]) => void;
+  onValidUpload: (results: DetectionResults[], files: File[]) => void;
 }
 
-type DetectionResults = {
+export type DetectionResults = {
   name: string,
   confidence: number,
   error?: string,
@@ -49,7 +49,7 @@ export const ImageUploader:FC<PropsWithChildren<ImageUploaderProps>> = ({onValid
 
       if(error === null && value !== undefined){
         console.log(true)
-        onValidUpload(detectionResults, value.file);
+        onValidUpload(res.results, value.file);
       }
     }).catch(err => {
       setError(`Error uploading images. Please try again.`)

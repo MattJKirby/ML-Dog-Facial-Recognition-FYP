@@ -1,10 +1,11 @@
 import { Box, Button, Image } from "grommet";
 import { Edit } from "grommet-icons";
 import { FC, PropsWithChildren, useState } from "react"
+import { DetectionResults } from ".";
 import { CropPanel } from "./cropPanel";
 
 type ImageCropperProps = {
-  results: any[];
+  results: DetectionResults[];
   images: File[];
 };
 
@@ -23,10 +24,10 @@ export const ImageCropper: FC<PropsWithChildren<ImageCropperProps>> = ({results,
     <Box>
       {images && images.map((img) => {
         const result = results.find((r) => r.name === img.name);
-        if(result && result.boundingBoxCoordinates !== undefined){
+        if(result && result.bbox !== undefined){
           return <CropPanel 
             key={img.name} 
-            bbox={result.boundingBoxCoordinates} 
+            bbox={result.bbox} 
             display={img.name === edit} 
             image={img} 
             onOutputChange={(name, output) => handleCropUpdate(name, output)}

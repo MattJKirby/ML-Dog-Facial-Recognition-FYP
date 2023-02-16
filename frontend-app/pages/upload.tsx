@@ -2,7 +2,7 @@ import { AppBar } from "@/src/components/AppBar"
 import { Anchor, Box, Button, FileInput, Form, Grommet, Menu, Page, PageContent, PageHeader, FormField, Grid, Text, TextInput, Select, CheckBox } from 'grommet'
 import { theme } from '@/src/utils'
 import { useEffect, useState } from "react";
-import { ImageUploader } from "@/src/components/ImageUploader";
+import { DetectionResults, ImageUploader } from "@/src/components/ImageUploader";
 import { ImageCropper } from "@/src/components/ImageUploader/imageCropper";
 import Router from 'next/router';
 
@@ -23,8 +23,8 @@ type formData = {
 const Upload = () => {
   const [uploader, setUploader] = useState<boolean>(true);
   const [cropper, setCropper] = useState<boolean>(false);
-  const [detectionResults, setDetectionResults] = useState<any>(undefined);
-  const [detectionImages, setDetectionImages] = useState<any[]>([]);
+  const [detectionResults, setDetectionResults] = useState<DetectionResults[] | null>(null);
+  const [detectionImages, setDetectionImages] = useState<File[]>([]);
   const [value, setValue] = useState<formData>({dogName: '', breed: '',ownerfName: '', ownerlName: '', phoneNumber: ''});
   const [breedsList, setBreedsList] = useState<string[]>([]);
   const [selectedBreed, setSelectedBreed] = useState<string>('')
@@ -114,10 +114,13 @@ const Upload = () => {
               </Form>
 
                   {uploader && 
-                    <ImageUploader onValidUpload={(results:any, images: File[]) => onValidUpload(results, images)}/>
+                    <ImageUploader onValidUpload={(results:DetectionResults[], images: File[]) => onValidUpload(results, images)}/>
                   }
 
-                  {cropper &&
+                  {console.log(detectionResults,detectionImages)}
+
+                  {cropper && detectionResults &&
+
                     <ImageCropper results={detectionResults} images={detectionImages}/>
                   }
   
