@@ -13,7 +13,6 @@ class DetectionModel():
   def predict(self, img):
     img = Image.open(io.BytesIO(img)).convert('RGB') 
 
-    print(img.mode)
     if img.mode in ("RGBA", "P"): 
       img = img.convert("RGB")
 

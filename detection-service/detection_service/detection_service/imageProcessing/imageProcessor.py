@@ -10,6 +10,10 @@ class ImageProcessor():
 
   def isolateDetection(self, img, bbox_parameters):
     img = Image.open(io.BytesIO(img))
+
+    if img.mode in ("RGBA", "P"): 
+      img = img.convert("RGB")
+      
     croppedImg = img.crop(box=bbox_parameters)
     width, height = croppedImg.size
 
