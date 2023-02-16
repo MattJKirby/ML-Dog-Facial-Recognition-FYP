@@ -4,6 +4,7 @@ import error from "next/error"
 import { FC, PropsWithChildren, useEffect, useState } from "react";
 import style from "styled-jsx/style"
 import Image from "next/image";
+import e from "cors";
 
 type ImageUploaderProps = {
   onValidUpload: (results: any, files: File[]) => void;
@@ -22,33 +23,38 @@ export const ImageUploader:FC<PropsWithChildren<ImageUploaderProps>> = ({onValid
   const [detectionResults, setDetectionResults] = useState<Map<string,DetectionResults>>(new Map());
   const [loading, setLoading] = useState<boolean>(false);
 
-  useEffect(() => {
-    if (detectionResults.size > 0){
-      const badDetections = Array.from(detectionResults.values()).filter(r => r.bbox === undefined);
-      if(badDetections.length > 0){
-        setError(`Could not detect face in images: ${badDetections.map(d => d.name).join(', ')}`)
-      }
-    }
-
-    if(value && value.file.length > 8 && value.file.length < 4){
+  const handleSetValue = (e: {file: File[]}) => {
+    if(e.file.length > 8 || e.file.length < 4){
       setError('Please upload between 4 and 8 images.')
+    } else {
+      setError(null)
     }
-
-    if(error === null && value && detectionResults.size > 0){
-      onValidUpload(detectionResults, value.file);
-    }
-
-  },[detectionResults, error, onValidUpload, value])
+    setValue(e)
+  }
 
 
   const handleAPICall = (e: any) => {
     setLoading(true);
-    photoUploadAPICall(e, 'http://127.0.0.1:5000/predict').then((res) => {
+    photoUploadAPICall(e, 'http://127.0.0.1:5000/predict').then((res: {results: DetectionResults[]}) => {
       res.results.forEach((result: any) => setDetectionResults(prev => new Map(prev.set(result.name, result))));
+      
+      if (res.results.length > 0){
+        const badDetections = res.results.filter(r => r.bbox === undefined);
+        if(badDetections.length > 0){
+          setError(`Could not detect face in images: ${badDetections.map(d => d.name).join(', ')}`)
+        } else {
+          setError(null)
+        }
+      }
+
+      if(error === null && value !== undefined){
+        console.log(true)
+        onValidUpload(detectionResults, value.file);
+      }
     }).catch(err => {
       setError(`Error uploading images. Please try again.`)
     }).finally(() => {
-      setLoading(false)
+      setLoading(false);
     });
   }
 
@@ -56,7 +62,7 @@ export const ImageUploader:FC<PropsWithChildren<ImageUploaderProps>> = ({onValid
     <Box pad={{top: 'small'}}>
       <Form
         value={value}
-        onChange={nextValue => setValue(nextValue)}
+        onChange={nextValue => handleSetValue(nextValue)}
         onSubmit={(e) => handleAPICall(e)}
       >
         <FormField name="files" htmlFor="text-input-id" label={'Upload Images'}>
@@ -102,7 +108,6 @@ const photoUploadAPICall = async (event: any, url: string) => {
     method: 'POST',
     body: formData
   }
-  // const res = await fetch(url, reqOptions);
   const res = await fetch(url, reqOptions);
   const data = await res.json();
 

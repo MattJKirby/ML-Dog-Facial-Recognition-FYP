@@ -37,7 +37,7 @@ def predict():
     bbox_parameters, prediction = detectionModel.predict(image)
   
     try:
-      if prediction['confidence'] < 0.20:
+      if prediction['confidence'] < 0.30:
         raise Exception(f"Detection in image, {file.filename}, does not match the required confidence threshold.")
 
       detection = imageProcessor.encode_pil_image(imageProcessor.isolateDetection(image, bbox_parameters))
