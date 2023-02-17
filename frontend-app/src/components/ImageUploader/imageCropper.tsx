@@ -1,5 +1,4 @@
 import { Box, Button, Image } from "grommet";
-import { Edit } from "grommet-icons";
 import { FC, PropsWithChildren, useState } from "react"
 import { DetectionResults } from ".";
 import { CropPanel } from "./cropPanel";

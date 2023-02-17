@@ -84,11 +84,11 @@ export const ImageUploader:FC<PropsWithChildren<ImageUploaderProps>> = ({onValid
               const result = detectionResults.get(file.name)
 
               return (
-              <Box key={index} style={{width: '100px', height: '100px', boxSizing: 'content-box'}} border={{color: result && result?.bbox === undefined ? 'red':'brand'}} background='bg2'>
-                <Image alt={file.name} style={{objectFit: 'contain'}} width={100} height={100}  src={URL.createObjectURL(file)}></Image>
-              </Box>
-              )
-            })}
+                <Box key={index} style={{width: '100px', height: '100px', boxSizing: 'content-box'}} border={{color: result && result?.bbox === undefined ? 'red':'brand'}} background='bg2'>
+                  <Image alt={file.name} style={{objectFit: 'contain'}} width={100} height={100}  src={URL.createObjectURL(file)}></Image>
+                </Box>
+                )
+              })}
             </Grid>
           </Box>
           <Box>

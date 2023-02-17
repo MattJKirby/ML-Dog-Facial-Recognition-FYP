@@ -10,7 +10,6 @@ type AppBarProps ={
 export const AppBar: FC<PropsWithChildren<AppBarProps>> = ({children, props}) => {
   const [menu, setMenu] = useState(false);
   
-  
   return (
     <div style={{display: 'flex', flexDirection: 'row', width: '100%'}}>
       <Header background="#FFF"
