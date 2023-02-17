@@ -114,7 +114,7 @@ const Upload = () => {
               </Form>
 
                   {uploader && 
-                    <ImageUploader onValidUpload={(results:DetectionResults[], images: File[]) => onValidUpload(results, images)}/>
+                    <ImageUploader min={4} max={8} onValidUpload={(results:DetectionResults[], images: File[]) => onValidUpload(results, images)}/>
                   }
 
                   {cropper && detectionResults &&

@@ -7,6 +7,8 @@ import Image from "next/image";
 import e from "cors";
 
 type ImageUploaderProps = {
+  min: number;
+  max: number
   onValidUpload: (results: DetectionResults[], files: File[]) => void;
 }
 
@@ -17,15 +19,19 @@ export type DetectionResults = {
   bbox?: number[]
 }
 
-export const ImageUploader:FC<PropsWithChildren<ImageUploaderProps>> = ({onValidUpload}) => {
+export const ImageUploader:FC<PropsWithChildren<ImageUploaderProps>> = ({
+  min,
+  max,
+  onValidUpload
+}) => {
   const [value, setValue] = useState<{file: File[]} | undefined>(undefined);
   const [error, setError] = useState<string | null>(null);
   const [detectionResults, setDetectionResults] = useState<Map<string,DetectionResults>>(new Map());
   const [loading, setLoading] = useState<boolean>(false);
 
   const handleSetValue = (e: {file: File[]}) => {
-    if(e.file.length > 8 || e.file.length < 4){
-      setError('Please upload between 4 and 8 images.')
+    if(e.file.length > max || e.file.length < min){
+      setError(max === 1 ? `Please upload 1 image` : `Please upload between ${min} and ${max} images.`)
     } else {
       setError(null)
     }
@@ -67,9 +73,9 @@ export const ImageUploader:FC<PropsWithChildren<ImageUploaderProps>> = ({onValid
       >
         <FormField name="files" htmlFor="text-input-id" label={'Upload Images'}>
           <FileInput
-            multiple={true}
+            multiple={max > 1}
             name="file"
-            max={8}
+            max={max}
             min={1}
           />
         </FormField>
