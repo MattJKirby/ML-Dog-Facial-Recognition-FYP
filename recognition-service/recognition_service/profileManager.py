@@ -43,5 +43,7 @@ class ProfileManager:
     response = requests.get(serverPath, stream=True)
     return io.BytesIO(response.content)
 
-  
-   
+  def getProfilesByIndexArray(self, indexes):
+    profiles = self.datastore.getProfilesBySortedUidIndex(indexes)
+
+    return profiles

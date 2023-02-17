@@ -1,3 +1,4 @@
+import array
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.metrics import f1_score, accuracy_score
 from sklearn.manifold import TSNE
@@ -38,8 +39,12 @@ class NearestNeighbourClassifier:
     self.knn.fit(data_2d, labels)
     print(self.knn.n_samples_fit_)
 
-  def predict(self, img):
+  def predict(self, img, no):
     print(img.shape)
     data_2d = img.reshape(1,-1)
 
-    return self.knn.predict(data_2d)
+    probas = self.knn.predict_proba(data_2d)
+
+    result = probas.argsort()[-no:][::-1]
+
+    return result

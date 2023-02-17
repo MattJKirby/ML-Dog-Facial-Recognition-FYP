@@ -29,3 +29,12 @@ class ProfileDatastore:
       profiles[profile['ProfileUid']] = imagePathList
 
     return profiles
+
+  def getProfilesBySortedUidIndex(self, indexes):
+    profiles = []
+    profileList = list(self.database[self.collection].find().sort('ProfileUid', 1))
+
+    for i in indexes:
+      profiles.append(profileList[i])
+
+    return profileList

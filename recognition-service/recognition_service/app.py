@@ -56,10 +56,10 @@ def predict():
     imgs = image_processor.pre_process_images([file])
     embeddings = recog.generate_image_embeddings(imgs)
 
-    result = knn.predict(embeddings)
-    print(result)
+    result = knn.predict(embeddings,3)[0]
+    profileData = profileManager.getProfilesByIndexArray(result)
+
+    return {"results": profileData, "statusCode": 200}
   except Exception as e:
     print(e)
-
-  return 'asdf'
-
+    return {"error": e, "statusCoode": 400}
