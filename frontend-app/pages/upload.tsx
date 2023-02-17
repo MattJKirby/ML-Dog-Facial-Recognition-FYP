@@ -117,10 +117,7 @@ const Upload = () => {
                     <ImageUploader onValidUpload={(results:DetectionResults[], images: File[]) => onValidUpload(results, images)}/>
                   }
 
-                  {console.log(detectionResults,detectionImages)}
-
                   {cropper && detectionResults &&
-
                     <ImageCropper results={detectionResults} images={detectionImages}/>
                   }
   
