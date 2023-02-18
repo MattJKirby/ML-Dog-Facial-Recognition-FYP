@@ -3,7 +3,7 @@ import { Accordion, AccordionPanel, Anchor, Box, Button, Header, Layer, Text } f
 import { Add, Close, Search } from "grommet-icons";
 import { PropsWithChildren, FC, useEffect, MouseEvent } from "react";
 import { ServiceStatusItem } from "../ServiceStatusItem";
-import Router from 'next/router';
+import Router, {useRouter} from 'next/router';
 
 type LayerMenuProps = {
   display: boolean;
@@ -17,6 +17,7 @@ export const LayerMenu:FC<PropsWithChildren<LayerMenuProps>> = ({
   setDisplay
   }) => {
     const escape = useKeyPress('Escape');
+    const router = useRouter()
 
     const handleOverlayClick = (e: MouseEvent) => {
       if(e.currentTarget === e.target){
@@ -70,9 +71,9 @@ export const LayerMenu:FC<PropsWithChildren<LayerMenuProps>> = ({
                   />
                 </Header>
                 <Box pad='small'>
-                  <Anchor weight='light' color={Router.route === '/' ? 'brand' : "#000"} margin='xsmall' label='Home' alignSelf='stretch'onClick={() => pushToUrl('/')} />
-                  <Anchor weight='light' color={Router.route === '/search' ? 'brand' : "#000"} margin='xsmall' label='Search' alignSelf='stretch'onClick={() => pushToUrl('/search/')} />
-                  <Anchor weight='light' color={Router.route === '/upload/new' ? 'brand' : "#000"} margin='xsmall' label='Upload profile' style={{whiteSpace: 'nowrap'}} onClick={() => pushToUrl('/upload/new')}/>
+                  <Anchor weight='light' color={router.pathname === '/' ? 'brand' : "#000"} margin='xsmall' label='Home' alignSelf='stretch'onClick={() => pushToUrl('/')} />
+                  <Anchor weight='light' color={router.pathname === '/search' ? 'brand' : "#000"} margin='xsmall' label='Search' alignSelf='stretch'onClick={() => pushToUrl('/search/')} />
+                  <Anchor weight='light' color={router.pathname === '/upload/new' ? 'brand' : "#000"} margin='xsmall' label='Upload profile' style={{whiteSpace: 'nowrap'}} onClick={() => pushToUrl('/upload/new')}/>
                 </Box>
               </Box>
 
