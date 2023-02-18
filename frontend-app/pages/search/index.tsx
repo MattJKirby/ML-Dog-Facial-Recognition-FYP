@@ -3,20 +3,36 @@ import { DetectionResults, ImageUploader } from "@/src/components/ImageUploader"
 import { ImageCropper } from "@/src/components/ImageUploader/imageCropper";
 import { theme } from "@/src/utils";
 import { Anchor, Box, Button, FileInput, Form, FormField, Grommet, Page, PageContent, PageHeader } from "grommet";
+import { GetServerSideProps } from "next";
+import Router from "next/router";
 import { useState } from "react";
 
 const Search = () => {
   const [uploader, setUploader] = useState<boolean>(true);
   const [cropper, setCropper] = useState<boolean>(false);
   const [detectionResults, setDetectionResults] = useState<DetectionResults[] | null>(null);
-  const [detectionImages, setDetectionImages] = useState<File[]>([]);
+  const [sourceImages, setSourceImages] = useState<File[]>([]);
+  const [croppedImages, setCroppedImages] = useState<File[]>([]);
   
   const onValidUpload = (results: any, images: File[]) => {
     setUploader(false);
     setCropper(true);
     setDetectionResults(results);
-    setDetectionImages(images);
+    setSourceImages(images);
     // setReady(true)
+  }
+
+  const handleCropUpdate = (output: string, name: string) => {
+    fetch(output)
+    .then(res => res.blob())
+    .then(blob => {
+      const file = new File([blob], name,{ type: "image/png" })
+      setCroppedImages(prev => [...prev.filter(d => d.name !== name), file])
+    })
+  }
+
+  const handleSubmit = () => {
+    predictApiCall('http://127.0.0.1:5001/predict',croppedImages[0])
   }
 
   return(
@@ -29,19 +45,20 @@ const Search = () => {
               <PageHeader
                 title="Identify a Dog"
                 subtitle="Upload an image to indentify a missing dog."
-                parent={<Anchor label="Parent Page" />}
+                parent={<Anchor label="Search" onClick={() => Router.reload()}/>}
+                actions={ 
+                  <Box direction="row" gap="medium">
+                    <Button primary label="Search" disabled={croppedImages.length !== 1} onClick={() => null}/>
+                    <Button type="reset" label="Reset" onClick={() => Router.reload()} />
+                  </Box>}
               />
               {uploader && 
                 <ImageUploader min={1} max={1} onValidUpload={(results:DetectionResults[], images: File[]) => onValidUpload(results, images)}/>
               }
 
               {cropper && detectionResults &&
-                <ImageCropper results={detectionResults} images={detectionImages}/>
+                <ImageCropper results={detectionResults} images={sourceImages} updateOutput={handleCropUpdate}/>
               }
-
-            <Form>
-              <Button label=""/>
-            </Form>
            </Box>  
           </Box>  
        </PageContent>  
@@ -51,3 +68,19 @@ const Search = () => {
 }
 
 export default Search;
+
+const predictApiCall = async (url: string, target: File) => {
+  const formData = new FormData();
+  formData.append(`image`, target);
+
+  const reqOptions = {
+    method: 'POST',
+    body: formData
+  }
+
+  const res = await fetch(url, reqOptions);
+  const data = await res.json();
+  return data;
+};
+
+
