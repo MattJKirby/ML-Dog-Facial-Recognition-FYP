@@ -5,41 +5,7 @@ import { theme } from '@/src/utils'
 import { AppBar } from '@/src/components/AppBar'
 import { More } from 'grommet-icons'
 import { ProfileScroller } from '@/src/components/ProfileScroller'
-
-const actions = [
-  {
-    label: 'Get Started',
-    primary: true,
-  },
-  {
-    label: 'Follow',
-    secondary: true,
-  },
-  {
-    label: 'File Issue',
-    secondary: true,
-  },
-] 
-const controls = {
-  small: (
-    <Menu
-      dropAlign={{ top: 'bottom', right: 'right' }}
-      items={actions.map((action) => ({ label: action.label }))}
-      icon={<More />}
-    />
-  ),
-  medium: (
-    <>
-      <Button {...actions[0]} />
-      <Menu
-        dropAlign={{ top: 'bottom', right: 'right' }}
-        items={actions.slice(1)}
-        icon={<More />}
-      />
-    </>
-  ),
-  large: actions.map((action) => <Button {...action} />),
-} 
+import Router from 'next/router'
 
 
 export default function Home() {
@@ -62,10 +28,11 @@ export default function Home() {
               library.`}
               actions={
               <Box direction="row" gap="small" align="center">
-              {controls['large']}
+                <Button primary label="Identify a dog" onClick={() => Router.push('/search/')}/>
+                <Button label="Upload a profile" onClick={() => Router.push('/upload/new')}/>
               </Box>
               }
-              parent={<Anchor label="Home Page" />}
+              parent={<Anchor label="Home" />}
             />
 
             <ProfileScroller />
