@@ -2,6 +2,7 @@ import axios from 'axios'
 import express, { Request, Response } from 'express'
 import multer from 'multer'
 import { ProfileManager } from '../Profiles/ProfileManager'
+import { v4 as uuidv4 } from 'uuid';
 
 export const ProfileRouter = express.Router()
 
@@ -14,7 +15,8 @@ const multerStorage = multer.diskStorage({
   },
 
   filename: function (req: any, file: any, cb: any) {
-      cb(null, file.originalname)
+      const imgUid = uuidv4()
+      cb(null, `${imgUid}_${file.originalname}`)
   }
 })
 
