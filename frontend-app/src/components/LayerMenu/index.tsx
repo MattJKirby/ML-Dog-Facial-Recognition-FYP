@@ -70,8 +70,8 @@ export const LayerMenu:FC<PropsWithChildren<LayerMenuProps>> = ({
                   />
                 </Header>
                 <Box pad='small'>
-                  <Anchor weight='light' color={"#000"} margin='xsmall' label='Search' alignSelf='stretch'onClick={() => pushToUrl('/search')} />
-                  <Anchor weight='light' color={"#000"} margin='xsmall' label='Upload profile' style={{whiteSpace: 'nowrap'}} onClick={() => pushToUrl('/upload')}/>
+                  <Anchor weight='light' color={"#000"} margin='xsmall' label='Search' alignSelf='stretch'onClick={() => pushToUrl('/search/')} />
+                  <Anchor weight='light' color={"#000"} margin='xsmall' label='Upload profile' style={{whiteSpace: 'nowrap'}} onClick={() => pushToUrl('/upload/new')}/>
                 </Box>
               </Box>
 
