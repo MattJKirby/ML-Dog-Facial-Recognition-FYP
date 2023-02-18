@@ -70,8 +70,10 @@ export const LayerMenu:FC<PropsWithChildren<LayerMenuProps>> = ({
                   />
                 </Header>
                 <Box pad='small'>
-                  <Anchor weight='light' color={"#000"} margin='xsmall' label='Search' alignSelf='stretch'onClick={() => pushToUrl('/search/')} />
-                  <Anchor weight='light' color={"#000"} margin='xsmall' label='Upload profile' style={{whiteSpace: 'nowrap'}} onClick={() => pushToUrl('/upload/new')}/>
+                  {console.log(Router.route)}
+                  <Anchor weight='light' color={Router.route === '/' ? 'brand' : "#000"} margin='xsmall' label='Home' alignSelf='stretch'onClick={() => pushToUrl('/')} />
+                  <Anchor weight='light' color={Router.route === '/search' ? 'brand' : "#000"} margin='xsmall' label='Search' alignSelf='stretch'onClick={() => pushToUrl('/search/')} />
+                  <Anchor weight='light' color={Router.route === '/upload/new' ? 'brand' : "#000"} margin='xsmall' label='Upload profile' style={{whiteSpace: 'nowrap'}} onClick={() => pushToUrl('/upload/new')}/>
                 </Box>
               </Box>
 
