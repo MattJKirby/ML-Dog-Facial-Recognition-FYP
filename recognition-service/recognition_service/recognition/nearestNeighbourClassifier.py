@@ -40,7 +40,6 @@ class NearestNeighbourClassifier:
     print(self.knn.n_samples_fit_)
 
   def predict(self, img, no):
-    print(img.shape)
     data_2d = img.reshape(1,-1)
 
     probas = self.knn.predict_proba(data_2d)
