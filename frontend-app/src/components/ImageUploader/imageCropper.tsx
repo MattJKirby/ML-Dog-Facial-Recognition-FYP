@@ -1,21 +1,27 @@
 import { Box, Button, Image } from "grommet";
-import { FC, PropsWithChildren, useState } from "react"
+import { FC, PropsWithChildren, useEffect, useState } from "react"
 import { DetectionResults } from ".";
 import { CropPanel } from "./cropPanel";
 
 type ImageCropperProps = {
+  updateOutput: (output:string, outputName: string) => void;
   results: DetectionResults[];
   images: File[];
 };
 
 
-export const ImageCropper: FC<PropsWithChildren<ImageCropperProps>> = ({results, images}) => {
+export const ImageCropper: FC<PropsWithChildren<ImageCropperProps>> = ({
+  results, 
+  images,
+  updateOutput
+}) => {
   const [croppedOutputs, setCroppedOutputs] = useState<Map<string, string>>(new Map())
   const [edit, setEdit] = useState<string | null>(null);
   
   const handleCropUpdate = (name: string, output:string) => {
     if(output !== croppedOutputs.get(name)){
-      setCroppedOutputs(prev => new Map(prev.set(name, output)))
+      setCroppedOutputs(prev => new Map(prev.set(name, output)));
+      updateOutput(output,name);
     }
   }
 
