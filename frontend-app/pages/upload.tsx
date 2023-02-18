@@ -24,7 +24,8 @@ const Upload = () => {
   const [uploader, setUploader] = useState<boolean>(true);
   const [cropper, setCropper] = useState<boolean>(false);
   const [detectionResults, setDetectionResults] = useState<DetectionResults[] | null>(null);
-  const [detectionImages, setDetectionImages] = useState<File[]>([]);
+  const [sourceImages, setSourceImages] = useState<File[]>([]);
+  const [croppedImages, setCroppedImages] = useState<File[]>([]);
   const [value, setValue] = useState<formData>({dogName: '', breed: '',ownerfName: '', ownerlName: '', phoneNumber: ''});
   const [breedsList, setBreedsList] = useState<string[]>([]);
   const [selectedBreed, setSelectedBreed] = useState<string>('')
@@ -43,14 +44,24 @@ const Upload = () => {
     setUploader(false);
     setCropper(true);
     setDetectionResults(results);
-    setDetectionImages(images);
+    setSourceImages(images);
     setReady(true)
   }
 
   const handleFormSumbit = (value: any) => {
-    if(detectionImages.length > 3){
-      newProfileApiCall('http://localhost:5002/profiles/new', value, detectionImages)
+    if(croppedImages.length > 3){
+      newProfileApiCall('http://localhost:5002/profiles/new', value, croppedImages)
     }
+  }
+
+  const handleCropUpdate = (output: string, name: string) => {
+    fetch(output)
+  .then(res => res.blob())
+  .then(blob => {
+    const file = new File([blob], name,{ type: "image/png" })
+    setCroppedImages(prev => [...prev.filter(d => d.name !== name), file])
+  })
+    
   }
 
   return(
@@ -118,7 +129,7 @@ const Upload = () => {
                   }
 
                   {cropper && detectionResults &&
-                    <ImageCropper results={detectionResults} images={detectionImages}/>
+                    <ImageCropper results={detectionResults} images={sourceImages} updateOutput={handleCropUpdate}/>
                   }
   
                   </Box>
