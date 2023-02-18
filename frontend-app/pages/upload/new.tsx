@@ -26,7 +26,7 @@ const Upload = () => {
   const [detectionResults, setDetectionResults] = useState<DetectionResults[] | null>(null);
   const [sourceImages, setSourceImages] = useState<File[]>([]);
   const [croppedImages, setCroppedImages] = useState<File[]>([]);
-  const [value, setValue] = useState<formData>({dogName: '', breed: '',ownerfName: '', ownerlName: '', phoneNumber: ''});
+  const [value, setValue] = useState<formData | null>(null);
   const [breedsList, setBreedsList] = useState<string[]>([]);
   const [selectedBreed, setSelectedBreed] = useState<string>('')
   const [ready, setReady] = useState<boolean>(false);
@@ -50,7 +50,9 @@ const Upload = () => {
 
   const handleFormSumbit = (value: any) => {
     if(croppedImages.length > 3){
-      newProfileApiCall('http://localhost:5002/profiles/new', value, croppedImages)
+      newProfileApiCall('http://localhost:5002/profiles/new', value, croppedImages).then(() => {
+        Router.push('/upload/done');
+      });
     }
   }
 
@@ -75,14 +77,14 @@ const Upload = () => {
               <Form
                 value={value}
                 onChange={nextValue => setValue(nextValue)}
-                onReset={() => setValue({})}
+                onReset={() => setValue(null)}
                 onSubmit={({ value }) => handleFormSumbit(value)}
                 style={{width: "100%"}}
               >
                  <PageHeader
                 title="Upload a profile"
                 subtitle="Upload a profile to register a missing dog into out database."
-                parent={<Anchor label="Parent Page" />}
+                parent={<Anchor label="Upload" onClick={() => Router.reload()}/>}
                 actions={ <Box direction="row" gap="medium">
                 <Button disabled={!ready && checked} type="submit" primary label="Submit" />
                 <Button type="reset" label="Reset" onClick={() => Router.reload()} />
