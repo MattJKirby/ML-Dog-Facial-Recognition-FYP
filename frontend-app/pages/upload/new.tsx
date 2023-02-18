@@ -86,7 +86,7 @@ const Upload = () => {
                 subtitle="Upload a profile to register a missing dog into out database."
                 parent={<Anchor label="Upload" onClick={() => Router.reload()}/>}
                 actions={ <Box direction="row" gap="medium">
-                <Button disabled={!ready && checked} type="submit" primary label="Submit" />
+                <Button disabled={croppedImages.length < 4 || !checked} type="submit" primary label="Submit" />
                 <Button type="reset" label="Reset" onClick={() => Router.reload()} />
               </Box>}
                 />
