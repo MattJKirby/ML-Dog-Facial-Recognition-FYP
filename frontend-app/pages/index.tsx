@@ -35,7 +35,6 @@ export default function Home() {
               parent={<Anchor label="Home" />}
             />
 
-            <ProfileScroller />
             </PageContent>
           </Page>
 
