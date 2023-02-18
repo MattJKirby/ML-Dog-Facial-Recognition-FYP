@@ -1,4 +1,4 @@
-import { PreviewImage } from "@/pages/upload";
+import { PreviewImage } from "@/pages/upload/new";
 import {FormField, FileInput, Box, Grid, Button, Form, Text, Spinner } from "grommet"
 import error from "next/error"
 import { FC, PropsWithChildren, useEffect, useState } from "react";
