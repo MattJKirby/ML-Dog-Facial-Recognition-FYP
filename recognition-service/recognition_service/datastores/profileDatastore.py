@@ -32,7 +32,7 @@ class ProfileDatastore:
 
   def getProfilesBySortedUidIndex(self, indexes):
     profiles = []
-    profileList = list(self.database[self.collection].find().sort('ProfileUid', 1))
+    profileList = list(self.database[self.collection].find({}, {'_id': 0}).sort('ProfileUid', 1))
 
     for i in indexes:
       profiles.append(profileList[i])

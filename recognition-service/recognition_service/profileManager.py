@@ -1,4 +1,5 @@
 import io
+import json
 import requests
 from PIL import Image
 from recognition_service.imageProcessor import ImageProcessor
@@ -45,5 +46,6 @@ class ProfileManager:
 
   def getProfilesByIndexArray(self, indexes):
     profiles = self.datastore.getProfilesBySortedUidIndex(indexes)
+    jsonProfiles = json.dumps([result for result in profiles], default=str)
 
-    return profiles
+    return jsonProfiles
