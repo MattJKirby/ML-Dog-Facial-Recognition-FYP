@@ -1,5 +1,6 @@
 import { Anchor, Box, Button, Header, HeaderProps, Text } from "grommet";
 import { Add, Home, Menu } from 'grommet-icons'
+import Router from "next/router";
 import { FC, PropsWithChildren, useState } from "react";
 import { LayerMenu } from "../LayerMenu";
 
@@ -19,7 +20,7 @@ export const AppBar: FC<PropsWithChildren<AppBarProps>> = ({children, props}) =>
         {...props}>
           <div>
             <Button  icon= {<Menu />} label="Menu" onClick={() => setMenu(!menu)}/>
-            <Anchor icon={<Home />} size='xsmall' />
+            <Anchor icon={<Home />} size='xsmall' onClick={() => Router.push('/')}/>
           </div>
           <Text size="large"></Text>
           {children}
