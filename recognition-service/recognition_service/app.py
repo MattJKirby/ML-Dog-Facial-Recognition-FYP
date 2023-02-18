@@ -1,4 +1,5 @@
 import base64
+import json
 import sys
 from urllib import response
 from PIL import Image
@@ -57,9 +58,8 @@ def predict():
     embeddings = recog.generate_image_embeddings(imgs)
 
     result = knn.predict(embeddings,3)[0]
-    profileData = profileManager.getProfilesByIndexArray(result)
-
-    return {"results": profileData, "statusCode": 200}
+    profileJsonData = profileManager.getProfilesByIndexArray(result)
+    return profileJsonData
   except Exception as e:
     print(e)
     return {"error": e, "statusCoode": 400}
