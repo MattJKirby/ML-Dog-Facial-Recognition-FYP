@@ -75,7 +75,7 @@ export const CropPanel: FC<PropsWithChildren<CroppedProps>> = ({
   }
 
   return ( 
-    <Box  style={{height: '100%', width: '100%', position: 'absolute', background: !display ? 'rgba(255,255,255,0)' : 'rgba(255,255,255,0.6)', visibility: display ? 'visible' : 'hidden', top: '0', left: '0'}}>
+    <Box style={{height: '100%', width: '100%', position: 'absolute', background: !display ? 'rgba(255,255,255,0)' : 'rgba(255,255,255,0.6)', visibility: display ? 'visible' : 'hidden', top: '0', left: '0'}}>
       <Box style={{width: '100%', height: '100%', position: 'relative', border: '1px solid blue', justifyContent: 'center', alignItems: 'center', display: 'flex'}}>
         <Box>
           <ReactCrop
