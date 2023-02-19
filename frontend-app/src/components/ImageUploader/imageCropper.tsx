@@ -42,14 +42,14 @@ export const ImageCropper: FC<PropsWithChildren<ImageCropperProps>> = ({
       }
       )}
 
-      <Box direction="row" >
+      <Box direction="row" background={'bg2'} justify='between'>
         {Array.from(croppedOutputs.entries()).map(output => {
           return (
-            <Box key={output[0]}  margin='medium' align="center">
-              <Box style={{width: '100px', height: '100px', boxSizing: 'content-box', display: 'flex'}} background='bg2' pad='small' >
+            <Box key={output[0]}  margin='small' align="center" background={'bg3'}>
+              <Box style={{width: '100px', height: '100px', boxSizing: 'content-box', display: 'flex'}} background='bg2' pad='xsmall' >
                 <Image alt={output[0]} style={{objectFit: 'contain'}} height={100} src={output[1]}></Image>
               </Box>
-              <Button size="small" onClick={() => setEdit(output[0])} label="View" margin={'small'}/>
+              <Button size="small" onClick={() => setEdit(output[0])} label="View" />
             </Box>
             )
         })}
