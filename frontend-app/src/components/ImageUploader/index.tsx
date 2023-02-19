@@ -1,7 +1,7 @@
 import { PreviewImage } from "@/pages/upload/new";
 import {FormField, FileInput, Box, Grid, Button, Form, Text, Spinner } from "grommet"
 import error from "next/error"
-import { FC, PropsWithChildren, useEffect, useState } from "react";
+import { FC, PropsWithChildren, useEffect, useRef, useState } from "react";
 import style from "styled-jsx/style"
 import Image from "next/image";
 import e from "cors";
@@ -24,6 +24,7 @@ export const ImageUploader:FC<PropsWithChildren<ImageUploaderProps>> = ({
   max,
   onValidUpload
 }) => {
+  const formRef = useRef<HTMLFormElement | null>(null)
   const [value, setValue] = useState<{file: File[]} | undefined>(undefined);
   const [error, setError] = useState<string | null>(null);
   const [detectionResults, setDetectionResults] = useState<Map<string,DetectionResults>>(new Map());
@@ -64,45 +65,47 @@ export const ImageUploader:FC<PropsWithChildren<ImageUploaderProps>> = ({
     });
   }
 
-  return (
-    <Box pad={{top: 'small'}}>
-      <Form
-        value={value}
-        onChange={nextValue => handleSetValue(nextValue)}
-        onSubmit={(e) => handleAPICall(e)}
-      >
-        <FormField name="files" htmlFor="text-input-id" label={'Upload Images'}>
+  return (<>
+    <Box pad={{top: 'small', bottom: 'small'}} direction="row" width="100%" justify='between' background='bg1' align='center'>
+      <Box flex={{grow: 1}} margin={'small'} width={{max: !value || value.file.length < 1? "100%" : "50%"}}>
+        <Form
+          ref={formRef}
+          value={value}
+          onChange={nextValue => handleSetValue(nextValue)}
+          onSubmit={(e) => handleAPICall(e)}
+          style={{marginBottom: '-12px'}}
+        >
+        <FormField name="files" htmlFor="text-input-id">
           <FileInput
             multiple={max > 1}
             name="file"
             max={max}
             min={1}
           />
-        </FormField>
-        <Box fill='horizontal' margin='1em'>
-          <Grid
-            fill='horizontal'
-            rows={['auto']}
-            columns={{count: 5, size: 'auto'}}
-            gap="small"
-          >
+          </FormField>
+        </Form>
+      </Box>
+      { value && value.file.length > 0 && 
+        <Box flex={{grow: 1}}>
+          <Box pad='small' style={{display: "grid", gap: "1rem", gridTemplateColumns: "repeat(auto-fit, minmax(100px, 1fr))"}} align='center'>
             {value && value.file.map((file, index) => {
               const result = detectionResults.get(file.name)
-
               return (
                 <Box key={index} style={{width: '100px', height: '100px', boxSizing: 'content-box'}} border={{color: result && result?.bbox === undefined ? 'red':'brand'}} background='bg2'>
                   <Image alt={file.name} style={{objectFit: 'contain'}} width={100} height={100}  src={URL.createObjectURL(file)}></Image>
                 </Box>
                 )
               })}
-            </Grid>
           </Box>
-          <Box>
-            <Text>{error}</Text>
-            <Button label={!loading ? 'Get Face Detections' : ' '} primary disabled={error !== null || loading} icon={loading? <Spinner /> : undefined} type='submit'/>
+        </Box>
+      }
+        
           </Box>
-        </Form>
-      </Box>
+             <Box margin={'small'}>
+              <Text size="small" color={'red'} margin='xsmall'>{error}</Text>
+              <Button label={!loading ? 'Get Face Detections' : ' '} primary disabled={error !== null || loading} icon={loading? <Spinner /> : undefined} onClick={() => formRef.current?.requestSubmit()} />
+           </Box>
+           </>
   )
 }
 
