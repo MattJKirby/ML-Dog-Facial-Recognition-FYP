@@ -2,8 +2,7 @@ import { AppBar } from "@/src/components/AppBar";
 import { DetectionResults, ImageUploader } from "@/src/components/ImageUploader";
 import { ImageCropper } from "@/src/components/ImageUploader/imageCropper";
 import { theme } from "@/src/utils";
-import { Anchor, Box, Button, FileInput, Form, FormField, Grommet, Page, PageContent, PageHeader } from "grommet";
-import { GetServerSideProps } from "next";
+import { Anchor, Box, Button, Grommet, Page, PageContent, PageHeader } from "grommet";
 import Router from "next/router";
 import { useState } from "react";
 
@@ -19,7 +18,6 @@ const Search = () => {
     setCropper(true);
     setDetectionResults(results);
     setSourceImages(images);
-    // setReady(true)
   }
 
   const handleCropUpdate = (output: string, name: string) => {
@@ -44,11 +42,11 @@ const Search = () => {
             <Box style={{maxWidth: '800px', width: "100%"}}>
               <PageHeader
                 title="Identify a Dog"
-                subtitle="Upload an image to indentify a missing dog."
+                subtitle="Upload an image to identify a missing dog."
                 parent={<Anchor label="Search" onClick={() => Router.reload()}/>}
                 actions={ 
                   <Box direction="row" gap="medium">
-                    <Button primary label="Search" disabled={croppedImages.length !== 1} onClick={() => null}/>
+                    <Button primary label="Search" disabled={croppedImages.length !== 1} onClick={() => handleSubmit()}/>
                     <Button type="reset" label="Reset" onClick={() => Router.reload()} />
                   </Box>}
               />
@@ -79,8 +77,7 @@ const predictApiCall = async (url: string, target: File) => {
   }
 
   const res = await fetch(url, reqOptions);
-  const data = await res.json();
-  return data;
+  return await res.json();
 };
 
 
