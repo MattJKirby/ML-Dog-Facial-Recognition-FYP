@@ -103,7 +103,7 @@ export const ImageUploader:FC<PropsWithChildren<ImageUploaderProps>> = ({
           </Box>
              <Box margin={'small'}>
               <Text size="small" color={'red'} margin='xsmall'>{error}</Text>
-              <Button label={!loading ? 'Get Face Detections' : ' '} primary disabled={error !== null || loading} icon={loading? <Spinner /> : undefined} onClick={() => formRef.current?.requestSubmit()} />
+              <Button label={!loading ? 'Get Face Detections' : ' '} primary disabled={error !== null || loading || !value} icon={loading? <Spinner /> : undefined} onClick={() => formRef.current?.requestSubmit()} />
            </Box>
            </>
   )
