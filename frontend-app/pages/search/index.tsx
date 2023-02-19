@@ -22,7 +22,7 @@ const Search = () => {
   const [detectionResults, setDetectionResults] = useState<DetectionResults[] | null>(null);
   const [sourceImages, setSourceImages] = useState<File[]>([]);
   const [croppedImages, setCroppedImages] = useState<File[]>([]);
-  const [matchedProfiles, setMatchedProfiles] = useState<DogProfile[] | null>(null)
+  const [matchedProfile, setMatchedProfile] = useState<DogProfile | null>(null)
   
   const onValidUpload = (results: any, images: File[]) => {
     setUploader(false);
@@ -41,8 +41,8 @@ const Search = () => {
   }
 
   const handleSubmit = () => {
-    predictApiCall('http://127.0.0.1:5001/predict',croppedImages[0]).then((res) => {
-      setMatchedProfiles(res)
+    predictApiCall('http://127.0.0.1:5001/predictSingle',croppedImages[0]).then((res) => {
+      setMatchedProfile(res)
       console.log(res)
     })
     
@@ -55,7 +55,7 @@ const Search = () => {
         <PageContent justify='center'>
           <Box fill={true} justify='center' width={'800px'} align='center'>
             <Box style={{maxWidth: '800px', width: "100%"}}>
-            {!matchedProfiles ? 
+            {!matchedProfile ? 
               <Box>
                 <PageHeader
                   title="Identify a Dog"
@@ -86,13 +86,7 @@ const Search = () => {
                       <Button type="reset" label="Try another search" onClick={() => Router.reload()} />
                     </Box>}
                 />
-                {matchedProfiles.map(profile => {
-                  return (
-                  <Box key={profile.ProfileUid}>
-                    {profile.PetName}
-                  </Box>
-                  )
-                })}
+                {matchedProfile && <Box>{matchedProfile.PetName}</Box>}
               </Box>
             }
            </Box> 
