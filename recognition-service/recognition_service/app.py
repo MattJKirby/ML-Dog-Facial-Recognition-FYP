@@ -63,3 +63,20 @@ def predict():
   except Exception as e:
     print(e)
     return {"error": e, "statusCoode": 400}
+
+@app.route('/predictSingle', methods=['POST'])
+def predict_single():
+  print(request.files['target'])
+
+  try:
+    file = request.files['target']
+    
+    imgs = image_processor.pre_process_images([file])
+    embeddings = recog.generate_image_embeddings(imgs)
+
+    result = knn.predict_single(embeddings)
+    print(result)
+    return {result: "asdf"}
+  except Exception as e:
+    print(e)
+    return {"error": e, "statusCoode": 400}

@@ -47,3 +47,8 @@ class NearestNeighbourClassifier:
     result = probas.argsort()[-no:][::-1]
 
     return result
+
+  def predict_single(self, img):
+    data_2d = img.reshape(1,-1)
+    prediction = self.knn.predict(data_2d)
+    return prediction
