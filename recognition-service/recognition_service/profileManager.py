@@ -47,5 +47,10 @@ class ProfileManager:
   def getProfilesByIndexArray(self, indexes):
     profiles = self.datastore.getProfilesBySortedUidIndex(indexes)
     jsonProfiles = json.dumps([result for result in profiles], default=str)
-
     return jsonProfiles
+
+  def getProfileByProfileUid(self, uid):
+    profile = self.datastore.getprofileByUid(uid)
+
+    jsonProfile = json.dumps(profile, default=str)
+    return jsonProfile

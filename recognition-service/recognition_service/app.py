@@ -73,10 +73,9 @@ def predict_single():
     
     imgs = image_processor.pre_process_images([file])
     embeddings = recog.generate_image_embeddings(imgs)
-
-    result = knn.predict_single(embeddings)
-    print(result)
-    return {result: "asdf"}
+    result = knn.predict_single(embeddings)[0]
+    profile = profileManager.getProfileByProfileUid(result)
+    return profile
   except Exception as e:
     print(e)
     return {"error": e, "statusCoode": 400}

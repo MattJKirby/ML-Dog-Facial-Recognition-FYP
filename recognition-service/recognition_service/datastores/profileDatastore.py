@@ -18,6 +18,10 @@ class ProfileDatastore:
       imageList.append(image['FilePath'])
     return imageList
 
+  def getprofileByUid(self, profileUid):
+    profile = self.database[self.collection].find_one({'ProfileUid': profileUid})
+    return profile
+
   def getAllProfiles(self):
     profileList = list(self.database[self.collection].find({}, {'_id': 0, 'ProfileUid': 1 ,'Images.FilePath': 1}))
     profiles = {}
