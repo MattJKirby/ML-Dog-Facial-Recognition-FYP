@@ -26,7 +26,7 @@ cors = CORS(app, resource={
 
 db_connector = MongoConnector('localhost',27017)
 profileManager = ProfileManager(db_connector)
-recog = RecognitionService('./model/dog_face_model_00888_val_loss_weights.hdf5')
+recog = RecognitionService('./model/dog_face_model_val_loss_weights_00863.hdf5')
 knn = NearestNeighbourClassifier()
 profileData = profileManager.loadProfiles()
 image_processor = ImageProcessor()

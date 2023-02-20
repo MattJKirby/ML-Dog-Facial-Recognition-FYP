@@ -17,7 +17,7 @@ class NearestNeighbourClassifier:
 
     print(data_2d.shape, len(labels))
 
-    embedded = TSNE(n_components=2, perplexity=(len(labels) * 0.1), random_state=50).fit_transform(data_2d)
+    embedded = TSNE(n_components=2, perplexity=(len(labels) *0.13)).fit_transform(data_2d)
     # embedded = PCA(n_components=2).fit_transform(data_2d)
 
     print(embedded.shape, len(labels))
