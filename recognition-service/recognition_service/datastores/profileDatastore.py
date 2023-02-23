@@ -41,4 +41,5 @@ class ProfileDatastore:
     for i in indexes:
       profiles.append(profileList[i])
 
-    return profileList
+
+    return profiles

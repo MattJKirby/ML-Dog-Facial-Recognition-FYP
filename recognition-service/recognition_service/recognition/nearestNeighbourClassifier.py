@@ -43,10 +43,16 @@ class NearestNeighbourClassifier:
     data_2d = img.reshape(1,-1)
 
     probas = self.knn.predict_proba(data_2d)
+    arr = np.array(probas)[0]
+    print(probas)
+    maxIndexes = arr.argsort()[-no:][::-1]
 
-    result = probas.argsort()[-no:][::-1]
+    filteredResults = []
+    for r in maxIndexes:
+      if probas[0][r] > 0:
+        filteredResults.append(r)
 
-    return result
+    return filteredResults
 
   def predict_single(self, img):
     data_2d = img.reshape(1,-1)
