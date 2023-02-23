@@ -57,7 +57,7 @@ def predict():
     imgs = image_processor.pre_process_images([file])
     embeddings = recog.generate_image_embeddings(imgs)
 
-    result = knn.predict(embeddings,3)[0]
+    result = knn.predict(embeddings,3)
     profileJsonData = profileManager.getProfilesByIndexArray(result)
     return profileJsonData
   except Exception as e:
