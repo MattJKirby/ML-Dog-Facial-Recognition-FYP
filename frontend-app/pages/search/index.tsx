@@ -1,12 +1,13 @@
 import { AppBar } from "@/src/components/AppBar";
 import { DetectionResults, ImageUploader } from "@/src/components/ImageUploader";
 import { ImageCropper } from "@/src/components/ImageUploader/imageCropper";
+import ProfileViewer from "@/src/components/ProfileViewer";
 import { theme } from "@/src/utils";
-import { Anchor, Box, Button, Grommet, Page, PageContent, PageHeader } from "grommet";
+import { Anchor, Box, Button, Grommet, Page, PageContent, PageHeader, Text } from "grommet";
 import Router from "next/router";
 import { useState } from "react";
 
-type DogProfile = {
+export type DogProfile = {
   ProfileUid: string;
   PetName: string;
   PetBreed: string;
@@ -23,6 +24,7 @@ const Search = () => {
   const [sourceImages, setSourceImages] = useState<File[]>([]);
   const [croppedImages, setCroppedImages] = useState<File[]>([]);
   const [matchedProfile, setMatchedProfile] = useState<DogProfile | null>(null)
+  const [matchedProfiles, setMatchedProfiles] = useState<DogProfile[] | null>(null)
   
   const onValidUpload = (results: any, images: File[]) => {
     setUploader(false);
@@ -43,7 +45,10 @@ const Search = () => {
   const handleSubmit = () => {
     predictApiCall('http://127.0.0.1:5001/predictSingle',croppedImages[0]).then((res) => {
       setMatchedProfile(res)
-      console.log(res)
+    })
+
+    predictApiCall('http://127.0.0.1:5001/predict',croppedImages[0]).then((res) => {
+      setMatchedProfiles(res)
     })
     
   }
@@ -76,19 +81,48 @@ const Search = () => {
                 }
               </Box>
             : 
-              <Box>
-                <PageHeader
-                  title="Search Results:"
-                  subtitle="Upload an image to identify a missing dog."
-                  parent={<Anchor label="Search" onClick={() => Router.reload()}/>}
-                  actions={ 
-                    <Box direction="row" gap="medium">
-                      <Button type="reset" label="Try another search" onClick={() => Router.reload()} />
-                    </Box>}
-                />
-                {matchedProfile && <Box>{matchedProfile.PetName}</Box>}
-              </Box>
+              <Box fill="horizontal">
+                <Box direction="row" justify="between" align="center" fill="horizontal">
+                  <PageHeader
+                    fill="horizontal"
+                    title={`Search Results`}
+                    subtitle="Upload an image to identify a dog."
+                    parent={<Anchor label="Search" onClick={() => Router.reload()}/>}
+                    actions={ 
+                      <Box direction="row-reverse" justify="center" align="center" gap="small">
+                        <img alt={'sourceImage'} style={{objectFit: 'contain'}} width={100} height={100} src={URL.createObjectURL(croppedImages[0])} />
+                        <Button type="reset" label="Try another search" onClick={() => Router.reload()} />
+                      </Box>}
+                  />
+                </Box>
+
+                
+
+
+                <Box background={'brand'} round pad={{left: "medium", right: "medium", bottom: "small"}} margin={{bottom: "small"}}>
+                  <Box>
+                    <PageHeader
+                      title={`Match Found: ${matchedProfile.PetName}`}
+                      subtitle="Upload an image to identify a missing dog."
+                      parent={<Anchor label="Match" onClick={() => Router.reload()}/>}
+                    />
+                  </Box>
+                  
+                  <Box fill='horizontal' pad='small' justify="center" align="center">
+                    <ProfileViewer size={130} profile={matchedProfile}/>
+                  </Box>
+                  </Box>
+                  <Box direction="row" fill="horizontal" justify="center" gap="small">
+                    <Button primary label="It's a match!"/>
+                    <Button label="Try again" />
+                  </Box>
+                  <Text>Possible matches</Text>
+                  {matchedProfiles && matchedProfiles.filter(p => p.ProfileUid !== matchedProfile.ProfileUid).map(profile => {
+                    return (<ProfileViewer key={profile.ProfileUid} profile={profile}/>)
+                  })}
+                </Box>
             }
+           
            </Box> 
           </Box>  
        </PageContent>  
