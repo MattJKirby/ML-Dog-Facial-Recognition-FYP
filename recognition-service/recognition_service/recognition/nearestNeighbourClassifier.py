@@ -9,7 +9,7 @@ import numpy as np
 class NearestNeighbourClassifier:
 
   def __init__(self):
-    self.knn = KNeighborsClassifier(n_neighbors=4, metric='euclidean')
+    self.knn = KNeighborsClassifier(n_neighbors=2, metric='euclidean')
 
   def fitData(self, data, labels):
     print(data.shape)
@@ -57,4 +57,7 @@ class NearestNeighbourClassifier:
   def predict_single(self, img):
     data_2d = img.reshape(1,-1)
     prediction = self.knn.predict(data_2d)
+    probas = self.knn.predict_proba(data_2d)
+
+    print(probas)
     return prediction
