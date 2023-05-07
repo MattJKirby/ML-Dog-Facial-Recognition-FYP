@@ -1,6 +1,7 @@
 import base64
 import json
 import sys
+import os
 from urllib import response
 from PIL import Image
 from recognition_service.recognition.recognitionService import RecognitionService
@@ -23,15 +24,17 @@ cors = CORS(app, resource={
     }
 })
 
+model_path = os.path.abspath(os.getenv('MODEL_PATH'))
 
-db_connector = MongoConnector('localhost',27017)
+db_connector = MongoConnector('0.0.0.0',27017)
 profileManager = ProfileManager(db_connector)
-recog = RecognitionService('./model/dog_face_model_val_loss_weights_00863.hdf5')
+recog = RecognitionService(model_path)
 knn = NearestNeighbourClassifier()
 profileData = profileManager.loadProfiles()
 image_processor = ImageProcessor()
 
-knn.fitData(recog.generate_image_embeddings(profileData[1]), profileData[0])
+if(profileData):
+  knn.fitData(recog.generate_image_embeddings(profileData[1]), profileData[0])
 
 
 

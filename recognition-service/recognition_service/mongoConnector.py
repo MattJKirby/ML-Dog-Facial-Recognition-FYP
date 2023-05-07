@@ -6,7 +6,7 @@ class MongoConnector:
   def __init__(self, host, port):
     self.host = host
     self.port = port
-    self.db_client = MongoClient(host=self.host, port=self.port)
+    self.db_client = MongoClient('mongodb://mongodb:27017/')
 
 
   def connect(self, db_name):

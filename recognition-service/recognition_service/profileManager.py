@@ -40,7 +40,7 @@ class ProfileManager:
     return(profileUids, image_processor.pre_process_images(profileImages))
 
   def convertPathToImage(self, path):
-    serverPath = 'http://localhost:5002/' + path.split('public/')[1]
+    serverPath = 'http://profile-service:3000/' + path.split('public/')[1]
     response = requests.get(serverPath, stream=True)
     return io.BytesIO(response.content)
 
