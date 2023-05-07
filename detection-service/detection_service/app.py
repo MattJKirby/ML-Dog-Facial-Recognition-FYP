@@ -1,4 +1,5 @@
 import sys
+import os
 from io import BufferedReader
 from detection_service.model.detectionModel import DetectionModel
 from detection_service.imageProcessing.imageProcessor import ImageProcessor
@@ -17,8 +18,8 @@ cors = CORS(app, resource={
     }
 })
 
-
-detectionModel = DetectionModel('./model/Tsinghua_train3_best.pt')
+model_path = os.path.abspath(os.getenv('MODEL_PATH'))
+detectionModel = DetectionModel(model_path)
 imageProcessor = ImageProcessor(minOutputResolution=00)
 
 
