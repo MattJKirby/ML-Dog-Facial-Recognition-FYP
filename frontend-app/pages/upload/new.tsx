@@ -190,9 +190,9 @@ const Upload = () => {
                     />
                   </FormField>
                   <FormField
-                    name="Disclaimer2"
+                    name="Confidentiality Disclaimer"
                     htmlFor="disclaimer2"
-                    label="Disclaimer2"
+                    label="Confidentiality Disclaimer"
                   >
                     <CheckBox
                       checked={checked2}
