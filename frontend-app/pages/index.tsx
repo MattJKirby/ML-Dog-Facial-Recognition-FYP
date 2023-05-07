@@ -1,12 +1,20 @@
-import Head from 'next/head'
-import styles from '@/styles/Home.module.css'
-import { Anchor, Box, Button, Grommet, Menu, Page, PageContent, PageHeader } from 'grommet'
-import { theme } from '@/src/utils'
-import { AppBar } from '@/src/components/AppBar'
-import { More } from 'grommet-icons'
-import { ProfileScroller } from '@/src/components/ProfileScroller'
-import Router from 'next/router'
-
+import Head from "next/head";
+import styles from "@/styles/Home.module.css";
+import {
+  Anchor,
+  Box,
+  Button,
+  Grommet,
+  Menu,
+  Page,
+  PageContent,
+  PageHeader,
+} from "grommet";
+import { theme } from "@/src/utils";
+import { AppBar } from "@/src/components/AppBar";
+import { More } from "grommet-icons";
+import { ProfileScroller } from "@/src/components/ProfileScroller";
+import Router from "next/router";
 
 export default function Home() {
   return (
@@ -19,29 +27,31 @@ export default function Home() {
       </Head>
       <main className={styles.main}>
         <Grommet full theme={theme}>
-        <AppBar />
-        <Page background='bg1' fill='vertical'>
-          <PageContent justify='center'>
-            <PageHeader
-              title="Dog Identifier"
-              subtitle={`Grommet helps you build responsive and accessible mobile-first projects for the web with an easy to use component 
-              library.`}
-              actions={
-              <Box direction="row" gap="small" align="center">
-                <Button primary label="Identify a dog" onClick={() => Router.push('/search/')}/>
-                <Button label="Upload a profile" onClick={() => Router.push('/upload/new')}/>
-              </Box>
-              }
-              parent={<Anchor label="Home" />}
-            />
-
+          <AppBar />
+          <Page background="bg1" fill="vertical">
+            <PageContent justify="center">
+              <PageHeader
+                title="Dog Identifier"
+                subtitle={`This app demonstrates the use of a facial recognition systems deployed in a web based application. To get started upload a dog profile or upload an image to detect the identity of a dog.`}
+                actions={
+                  <Box direction="row" gap="small" align="center">
+                    <Button
+                      primary
+                      label="Identify a dog"
+                      onClick={() => Router.push("/search/")}
+                    />
+                    <Button
+                      label="Upload a profile"
+                      onClick={() => Router.push("/upload/new")}
+                    />
+                  </Box>
+                }
+                parent={<Anchor label="Home" />}
+              />
             </PageContent>
           </Page>
-
         </Grommet>
       </main>
     </>
-  )
-};
-
-
+  );
+}

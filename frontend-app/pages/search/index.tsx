@@ -64,13 +64,13 @@ const Search = () => {
 
   const handleSubmit = () => {
     predictApiCall(
-      "http://127.0.0.1:5001/predictSingle",
+      "/api/recognition-service/predictSingle",
       croppedImages[0]
     ).then((res) => {
       setMatchedProfile(res);
     });
 
-    predictApiCall("http://127.0.0.1:5001/predict", croppedImages[0]).then(
+    predictApiCall("/api/recognition-service/predict", croppedImages[0]).then(
       (res) => {
         setMatchedProfiles(res);
       }

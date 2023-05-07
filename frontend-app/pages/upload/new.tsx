@@ -1,180 +1,271 @@
-import { AppBar } from "@/src/components/AppBar"
-import { Anchor, Box, Button, FileInput, Form, Grommet, Menu, Page, PageContent, PageHeader, FormField, Grid, Text, TextInput, Select, CheckBox } from 'grommet'
-import { theme } from '@/src/utils'
+import { AppBar } from "@/src/components/AppBar";
+import {
+  Anchor,
+  Box,
+  Button,
+  FileInput,
+  Form,
+  Grommet,
+  Menu,
+  Page,
+  PageContent,
+  PageHeader,
+  FormField,
+  Grid,
+  Text,
+  TextInput,
+  Select,
+  CheckBox,
+} from "grommet";
+import { theme } from "@/src/utils";
 import { useEffect, useState } from "react";
-import { DetectionResults, ImageUploader } from "@/src/components/ImageUploader";
+import {
+  DetectionResults,
+  ImageUploader,
+} from "@/src/components/ImageUploader";
 import { ImageCropper } from "@/src/components/ImageUploader/imageCropper";
-import Router from 'next/router';
+import Router from "next/router";
 
 export type PreviewImage = {
   name: string;
   src: string;
-}
+};
 
 type formData = {
-  dogName: string,
-  breed: string,
-  ownerfName: string,
-  ownerlName: string,
-  phoneNumber: string
- }
-
+  dogName: string;
+  breed: string;
+  ownerfName: string;
+  ownerlName: string;
+  phoneNumber: string;
+};
 
 const Upload = () => {
   const [uploader, setUploader] = useState<boolean>(true);
   const [cropper, setCropper] = useState<boolean>(false);
-  const [detectionResults, setDetectionResults] = useState<DetectionResults[] | null>(null);
+  const [detectionResults, setDetectionResults] = useState<
+    DetectionResults[] | null
+  >(null);
   const [sourceImages, setSourceImages] = useState<File[]>([]);
   const [croppedImages, setCroppedImages] = useState<File[]>([]);
   const [value, setValue] = useState<formData | null>(null);
   const [breedsList, setBreedsList] = useState<string[]>([]);
-  const [selectedBreed, setSelectedBreed] = useState<string>('')
+  const [selectedBreed, setSelectedBreed] = useState<string>("");
   const [ready, setReady] = useState<boolean>(false);
-  const [checked, setChecked] = useState<boolean>(false)
+  const [checked, setChecked] = useState<boolean>(false);
+  const [checked2, setChecked2] = useState<boolean>(false);
 
   useEffect(() => {
-    if(breedsList.length === 0){
-      formOptionsApiCall("https://dog.ceo/api/breeds/list/all").then(res => {
-        setBreedsList(Object.keys(res.message))
-      })
+    if (breedsList.length === 0) {
+      formOptionsApiCall("https://dog.ceo/api/breeds/list/all").then((res) => {
+        setBreedsList(Object.keys(res.message));
+      });
     }
-  })
+  });
 
   const onValidUpload = (results: any, images: File[]) => {
     setUploader(false);
     setCropper(true);
     setDetectionResults(results);
     setSourceImages(images);
-    setReady(true)
-  }
+    setReady(true);
+  };
 
   const handleFormSumbit = (value: any) => {
-    if(croppedImages.length > 3){
-      newProfileApiCall('http://localhost:5002/profiles/new', value, croppedImages).then(() => {
-        Router.push('/upload/done');
+    if (croppedImages.length > 3) {
+      newProfileApiCall(
+        "/api/profile-service/profiles/new",
+        value,
+        croppedImages
+      ).then(() => {
+        Router.push("/upload/done");
       });
     }
-  }
+  };
 
   const handleCropUpdate = (output: string, name: string) => {
     fetch(output)
-  .then(res => res.blob())
-  .then(blob => {
-    const file = new File([blob], name,{ type: "image/png" })
-    setCroppedImages(prev => [...prev.filter(d => d.name !== name), file])
-  })
-    
-  }
+      .then((res) => res.blob())
+      .then((blob) => {
+        const file = new File([blob], name, { type: "image/png" });
+        setCroppedImages((prev) => [
+          ...prev.filter((d) => d.name !== name),
+          file,
+        ]);
+      });
+  };
 
-  return(
+  return (
     <>
       <Grommet full theme={theme}>
         <AppBar />
-        <Page background='bg1' fill='vertical'>
-          <PageContent justify='center'>
-              <Box fill={true} justify='center' width={'800px'} align='center'>
-                <Box style={{maxWidth: '800px', width: "100%"}}>
-              <Form
-                value={value}
-                onChange={nextValue => setValue(nextValue)}
-                onReset={() => setValue(null)}
-                onSubmit={({ value }) => handleFormSumbit(value)}
-                style={{width: "100%"}}
-              >
-                 <PageHeader
-                title="Upload a profile"
-                subtitle="Upload a profile to register a missing dog into out database."
-                parent={<Anchor label="Upload" onClick={() => Router.reload()}/>}
-                actions={ <Box direction="row" gap="medium">
-                <Button disabled={croppedImages.length < 4 || !checked} type="submit" primary label="Submit" />
-                <Button type="reset" label="Reset" onClick={() => Router.reload()} />
-              </Box>}
-                />
-                <Box direction="row" gap="medium" style={{width: "100%"}}>
-                  <FormField name="Your pet's name" htmlFor="dogName" label="Pet's name">
-                    <TextInput id="dogName" name="dogName" required/>
-                  </FormField>
-                  <FormField name="Breed" htmlFor="dogName" label="Breed">
-                  <Select
-                    id="breed"
-                    name="breed"
-                    value={selectedBreed}
-                    options={breedsList}
-                    onChange={({ option }) => {setSelectedBreed(option)}}
-                    required
+        <Page background="bg1" fill="vertical">
+          <PageContent justify="center">
+            <Box fill={true} justify="center" width={"800px"} align="center">
+              <Box style={{ maxWidth: "800px", width: "100%" }}>
+                <Form
+                  value={value}
+                  onChange={(nextValue) => setValue(nextValue)}
+                  onReset={() => setValue(null)}
+                  onSubmit={({ value }) => handleFormSumbit(value)}
+                  style={{ width: "100%" }}
+                >
+                  <PageHeader
+                    title="Upload a profile"
+                    subtitle="Upload a profile to register a missing dog into out database."
+                    parent={
+                      <Anchor label="Upload" onClick={() => Router.reload()} />
+                    }
+                    actions={
+                      <Box direction="row" gap="medium">
+                        <Button
+                          disabled={
+                            croppedImages.length < 4 || !checked || !checked2
+                          }
+                          type="submit"
+                          primary
+                          label="Submit"
+                        />
+                        <Button
+                          type="reset"
+                          label="Reset"
+                          onClick={() => Router.reload()}
+                        />
+                      </Box>
+                    }
                   />
-                  </FormField>
-                </Box>
-                <Box direction="row" gap="medium" style={{width: "100%"}}>
-                  <FormField name="Owner name" htmlFor="ownerfName" label="Owner's first name">
-                    <TextInput id="ownerfName" name="ownerfName" required />
-                  </FormField>
-                  <FormField name="Owner name" htmlFor="ownerlName" label="Owner's last name">
-                    <TextInput id="ownerlName" name="ownerlName" required />
-                  </FormField>
-                  <FormField name="Owner name" htmlFor="phoneNumber" label="Phone number">
-                    <TextInput id="phoneNumber" name="phoneNumber" required/>
-                  </FormField>
-                </Box>
-                <FormField name="Disclaimer" htmlFor="disclaimer" label="Disclaimer">
-                  <CheckBox
-                    checked={checked}
-                    label="I confirm I am the legal owner of this dog."
-                    onChange={(event) => setChecked(event.target.checked)}
-                    required
-                  />
-                </FormField>
-              </Form>
-
-                  {uploader && 
-                    <ImageUploader min={4} max={8} onValidUpload={(results:DetectionResults[], images: File[]) => onValidUpload(results, images)}/>
-                  }
-
-                  {cropper && detectionResults &&
-                    <ImageCropper results={detectionResults} images={sourceImages} updateOutput={handleCropUpdate}/>
-                  }
-  
+                  <Box direction="row" gap="medium" style={{ width: "100%" }}>
+                    <FormField
+                      name="Your pet's name"
+                      htmlFor="dogName"
+                      label="Pet's name"
+                    >
+                      <TextInput id="dogName" name="dogName" required />
+                    </FormField>
+                    <FormField name="Breed" htmlFor="dogName" label="Breed">
+                      <Select
+                        id="breed"
+                        name="breed"
+                        value={selectedBreed}
+                        options={breedsList}
+                        onChange={({ option }) => {
+                          setSelectedBreed(option);
+                        }}
+                        required
+                      />
+                    </FormField>
                   </Box>
+                  <Box direction="row" gap="medium" style={{ width: "100%" }}>
+                    <FormField
+                      name="Owner name"
+                      htmlFor="ownerfName"
+                      label="Owner's first name"
+                    >
+                      <TextInput id="ownerfName" name="ownerfName" required />
+                    </FormField>
+                    <FormField
+                      name="Owner name"
+                      htmlFor="ownerlName"
+                      label="Owner's last name"
+                    >
+                      <TextInput id="ownerlName" name="ownerlName" required />
+                    </FormField>
+                    <FormField
+                      name="Owner name"
+                      htmlFor="phoneNumber"
+                      label="Phone number"
+                    >
+                      <TextInput id="phoneNumber" name="phoneNumber" required />
+                    </FormField>
+                  </Box>
+                  <FormField
+                    name="Disclaimer"
+                    htmlFor="disclaimer"
+                    label="Disclaimer"
+                  >
+                    <CheckBox
+                      checked={checked}
+                      label="I confirm I am the legal owner of this dog."
+                      onChange={(event) => setChecked(event.target.checked)}
+                      required
+                    />
+                  </FormField>
+                  <FormField
+                    name="Disclaimer2"
+                    htmlFor="disclaimer2"
+                    label="Disclaimer2"
+                  >
+                    <CheckBox
+                      checked={checked2}
+                      label="I consent to having my details shared to users of this platform who wish to contact me."
+                      onChange={(event) => setChecked2(event.target.checked)}
+                      required
+                    />
+                  </FormField>
+                </Form>
+
+                {uploader && (
+                  <ImageUploader
+                    min={4}
+                    max={8}
+                    onValidUpload={(
+                      results: DetectionResults[],
+                      images: File[]
+                    ) => onValidUpload(results, images)}
+                  />
+                )}
+
+                {cropper && detectionResults && (
+                  <ImageCropper
+                    results={detectionResults}
+                    images={sourceImages}
+                    updateOutput={handleCropUpdate}
+                  />
+                )}
               </Box>
+            </Box>
           </PageContent>
         </Page>
       </Grommet>
     </>
-  )
-}
+  );
+};
 
-export default Upload
+export default Upload;
 
 const formOptionsApiCall = async (url: string) => {
   const reqOptions = {
-    method: 'GET'
-  }
+    method: "GET",
+  };
   const res = await fetch(url, reqOptions);
   const data = await res.json();
 
-  if(data.status !== 'success'){
-    throw new Error(data.message)
+  if (data.status !== "success") {
+    throw new Error(data.message);
   }
   return data;
 };
 
-const newProfileApiCall = async (url: string, value: formData, images: File[]) => {
+const newProfileApiCall = async (
+  url: string,
+  value: formData,
+  images: File[]
+) => {
   const formData = new FormData();
   images.forEach((file: File, index: number) => formData.append(`image`, file));
-  Object.entries(value).forEach(entry => formData.append(entry[0], entry[1]))
+  Object.entries(value).forEach((entry) => formData.append(entry[0], entry[1]));
 
   const reqOptions = {
-    method: 'POST',
-    body: formData
-  }
+    method: "POST",
+    body: formData,
+  };
   // const res = await fetch(url, reqOptions);
   const res = await fetch(url, reqOptions);
   const data = await res.json();
 
-  if(data.statusCode !== 200){
-    throw new Error(data.message)
+  console.log(data);
+
+  if (data.statusCode !== 200) {
+    throw new Error(data.message);
   }
   return data;
 };
-
-
