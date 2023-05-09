@@ -34,15 +34,24 @@ class ProfileManager:
     for profile in profileDict:
       for path in profileDict[profile]:
         profileUids.append(profile)
-        profileImages.append(self.convertPathToImage(path))
+        img = self.convertPathToImage(path)
 
+        if(img != None):
+          profileImages.append(img)
 
+    if len(profileImages) == 0:
+      return
+    
     return(profileUids, image_processor.pre_process_images(profileImages))
 
   def convertPathToImage(self, path):
     serverPath = 'http://profile-service:3000/' + path.split('public/')[1]
     response = requests.get(serverPath, stream=True)
-    return io.BytesIO(response.content)
+
+    if response.status_code != 404:
+      return io.BytesIO(response.content)
+    else:
+      return None
 
   def getProfilesByIndexArray(self, indexes):
     profiles = self.datastore.getProfilesBySortedUidIndex(indexes)
