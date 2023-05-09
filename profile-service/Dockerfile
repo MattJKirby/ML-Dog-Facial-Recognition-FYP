@@ -9,6 +9,8 @@ RUN  npm install
 # Bundle app source
 COPY . .
 
+RUN mkdir -p /app/public/uploads
+
 EXPOSE 3000
 
 CMD [ "npm", "run", "start" ]
