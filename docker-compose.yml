@@ -49,8 +49,8 @@ services:
       - "3000"
     environment:
       - MONGO_URI=mongodb://mongodb:27017/db
-    volumes:
-      - ./profile-service/public:/app/public
+    # volumes:
+    # - ./profile-service/public:/app/public
 
   frontend-app:
     build:
