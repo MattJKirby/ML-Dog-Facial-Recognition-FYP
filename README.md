@@ -9,7 +9,7 @@ Final Year Project at The University of Surrey.
 - Once all containers have started, navigate to 'http://localhost:8080' within a browser.
 
 ## Using the Application
-The repository contains a folder of "unseen" canine profiles that consist of multiple profile and 'target' images for each canine individual.
+The repository contains a folder of "unseen" canine profiles that consist of multiple profile and 'target' images for each canine individual. By default, the propject databse does NOT contain any pre-loaded profiles. The following steps can be followed to upload and indetify one of the included canine profiles as part of the application.
 
 - Ensure the project application is running.
 - Use the application to upload a profile for one of the included unseen profiles using an individuals profile photos. Do not upload any target images as part of this process.
